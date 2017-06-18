@@ -1,0 +1,279 @@
+#VRML_SIM V6.0 utf8
+WorldInfo {
+  info [
+    "Description"
+    "Author: first name last name <e-mail>"
+    "Date: DD MMM YYYY"
+  ]
+  basicTimeStep 8
+}
+Viewpoint {
+  orientation 0.989538 -0.136968 -0.045331 4.94647
+  position 0.241482 2.20332 0.320165
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+PointLight {
+  location 0 0.3 0
+}
+DEF FLOOR Solid {
+  translation -0.489639 0 -0.511216
+  children [
+    Shape {
+      geometry ElevationGrid {
+        color Color {
+          color [
+            0.803922 0.498039 0.298039
+            1 1 0
+          ]
+        }
+        colorPerVertex FALSE
+        xDimension 11
+        xSpacing 0.1
+        zDimension 11
+        zSpacing 0.1
+      }
+    }
+  ]
+  boundingObject Transform {
+    translation 0.5 0 0.5
+    children [
+      Plane {
+      }
+    ]
+  }
+}
+EPuckSound {
+  translation -0.378411 0 0.230366
+  controller "CppController"
+  name "ped-puck"
+}
+Solid {
+  translation 0.4425 0 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL Box {
+        size 0.015 0.1 0.6
+      }
+    }
+  ]
+  name "wall"
+  boundingObject Shape {
+    appearance Appearance {
+    }
+    geometry USE WALL
+  }
+}
+Solid {
+  translation -0.4425 0 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL Box {
+        size 0.015 0.1 0.6
+      }
+    }
+  ]
+  name "wall"
+  boundingObject Shape {
+    appearance Appearance {
+    }
+    geometry USE WALL
+  }
+}
+Solid {
+  translation 0 0 -0.2925
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL Box {
+        size 0.015 0.1 0.9
+      }
+    }
+  ]
+  name "wall"
+  boundingObject Shape {
+    appearance Appearance {
+    }
+    geometry USE WALL
+  }
+}
+Solid {
+  translation 0 0 0.2925
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL Box {
+        size 0.015 0.1 0.9
+      }
+    }
+  ]
+  name "wall"
+  boundingObject Shape {
+    appearance Appearance {
+    }
+    geometry USE WALL
+  }
+}
+Solid {
+  translation 0.334472 0 -0.118756
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation 0.336473 0 0.0558225
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation -0.186169 0 0.148674
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation -0.0147636 0 -0.0851523
+  rotation 0 1 0 1.5708
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation 0.0420276 0 0.18724
+  rotation 0 1 0 3.14159
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation -0.00824448 0 -0.187894
+  rotation 0 1 0 3.14159
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
+Solid {
+  translation -0.294672 0 0.0577293
+  rotation 0 1 0 3.14159
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.501961 0 0
+        }
+      }
+      geometry DEF WALL2 Box {
+        size 0.015 0.1 0.195
+      }
+    }
+  ]
+  name "wall2"
+  boundingObject Shape {
+    geometry USE WALL2
+  }
+}
