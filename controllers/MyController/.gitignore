@@ -1,0 +1,36 @@
+*.d
+CppController.layout
+cmake-build-*
+*.exe_webots
+### https://raw.github.com/github/gitignore/92fe23112d1863d526651434169928ea0b61b853/C++.gitignore
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+

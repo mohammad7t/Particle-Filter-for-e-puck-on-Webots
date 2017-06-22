@@ -48,7 +48,7 @@ DEF FLOOR Solid {
 }
 EPuckSound {
   translation -0.378411 0 0.230366
-  controller "CppController"
+  controller "MyController"
   name "ped-puck"
 }
 Solid {
