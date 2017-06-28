@@ -4,7 +4,9 @@
 #include "Particle.h"
 #include "Observation.h"
 #include "Map.h"
-
+#include <math.h>
+#include "Observation.h"
+#include "Gaussian.h"
 // SENSOR ORIENTATION RADIAN
 #define S0_ORIENTATION 1.27
 #define S1_ORIENTATION 0.77
@@ -15,9 +17,7 @@
 #define S6_ORIENTATION 2.37
 #define S7_ORIENTATION 1.87
 
-#include <math.h>
-#include "Observation.h"
-#include "Gaussian.h"
+
 
 class SensorModel {
 public:
@@ -38,5 +38,6 @@ public:
     Gaussian getSensorGaussian(int sensorId, double distance);
     Observation sensorValuesToObservation(double *sensorValues);
 
+    double getObservationProbability(Particle *particle, Observation *observation,Map *world);
 };
 

@@ -19,4 +19,7 @@ const int RANGE = (1024 / 2);
 const int SENSORS = 8; //
 const double ROBOT_RADIUS = 3.7;
 
+#define X(point) ((point).real())
+#define Y(point) ((point).imag())
+
 #endif // COMMON_H_INCLUDED

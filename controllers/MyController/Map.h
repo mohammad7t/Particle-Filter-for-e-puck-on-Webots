@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -9,11 +10,12 @@
 #include "common.h"
 #include "Observation.h"
 
+
 class Map {
 public:
     int width;
     int height;
-    int scale;
+    double scale;
     bool **mapArray;
 
     vector<vector<bool> > mapVector;
@@ -25,10 +27,11 @@ public:
 
     bool isObstacle(double x,
                     double y); //parameter : real position x and y then compute cell that contain this position then return is it obstacle or not
-    double distanceToNearestObstacle(Point pos, double angle, Map map);
+    double distanceToNearestObstacle(Point pos, double angle    );
     void readEnviroment();
     void readMapFile();
 
-    double getObservationProbability(Particle *particle, Observation *observation);
+
+
 };
 
