@@ -34,7 +34,7 @@ public:
 
     void readSensorModelFile();
 
-    double convertSingleSensorValue(double sensorValue); //returns cenitemeter value
+    double convertSingleSensorValue(int sensorId, double sensorValue); //returns cenitemeter value
     Observation sensorValuesToObservation(double *sensorValues);
 
 };
