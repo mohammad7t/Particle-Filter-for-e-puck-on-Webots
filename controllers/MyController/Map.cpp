@@ -147,5 +147,11 @@ Point Map::getCenterCell(int x, int y) {
     return Point(x * 1 / scale + 1 / scale / 2);
 }
 
+bool Map::canRobotAt(double x, double y) {
+    Cell centerCell = getCell(x, y);
+
+    return canBeAt[centerCell.second][centerCell.first];
+}
+
 
 

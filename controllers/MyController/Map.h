@@ -48,5 +48,6 @@ public:
     void assignCanBeAt();
 
 
+    bool canRobotAt(double d, double d1);
 };
 

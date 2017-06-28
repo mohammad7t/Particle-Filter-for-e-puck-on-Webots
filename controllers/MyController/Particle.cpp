@@ -26,11 +26,12 @@ void Particle::doAction(Action action, Map *world) {
                 nextY > world->height * (1 / world->scale)) {
                 break;
             }
-            if (world->isObstacle(nextX, nextY)) {
+            if (world->canRobotAt(nextX, nextY)) {
                 break;
             }
             position = Point(nextX, nextY);
         }
+
     }
 }
 
