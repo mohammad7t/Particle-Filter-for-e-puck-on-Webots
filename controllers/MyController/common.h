@@ -3,6 +3,10 @@
 
 #include <webots/DifferentialWheels.hpp>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <utility>
+#include <math.h>
 
 using namespace std;
 using namespace webots;
@@ -13,5 +17,6 @@ const double AXLE_LENGTH = 0.052;
 const double ENCODER_RESOLUTION = 159.23;
 const int RANGE = (1024 / 2);
 const int SENSORS = 8; //
+const double ROBOT_RADIUS = 3.7;
 
 #endif // COMMON_H_INCLUDED

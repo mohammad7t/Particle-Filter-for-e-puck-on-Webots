@@ -16,8 +16,9 @@ public:
     MainController();
     virtual ~MainController();
     void readSensorValues();
-    void loop();
     void run();
+
+    int nextStep();
 };
 
 #endif // CPP_CONTROLLER_H

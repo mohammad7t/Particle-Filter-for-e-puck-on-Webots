@@ -1,3 +1,8 @@
+!.idea
+.idea/workspace.xml
+.idea/tasks.xml
+Debug/
+
 *.d
 CppController.layout
 cmake-build-*
@@ -32,5 +37,3 @@ cmake-build-*
 *.exe
 *.out
 *.app
-
-
