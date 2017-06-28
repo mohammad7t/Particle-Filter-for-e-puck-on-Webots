@@ -4,6 +4,7 @@
 Map::Map(void) {
     readEnviroment();
     readMapFile();
+    assignCanBeAt();
 }
 
 void Map::readEnviroment() {
@@ -115,12 +116,18 @@ Map::~Map(void) {
 
 void Map::assignCanBeAt() {
 
+    for (int l = 0; l < height; ++l) {
+        for (int i = 0; i < width; ++i) {
+            canBeAt[l][i] = true;
+        }
+    }
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < obstacles.size(); k++) {
-                if (abs(Point(i, j) - Point(obstacles[k].first, obstacles[k].second)) >) {
-
+                if (abs(Point(i, j) - Point(obstacles[k].first, obstacles[k].second)) > RADIUS_ROBOT) {
+                    canBeAt[i][j] = false;
+                    break;
                 }
             }
         }
@@ -140,9 +147,5 @@ Point Map::getCenterCell(int x, int y) {
     return Point(x * 1 / scale + 1 / scale / 2);
 }
 
-double Map::getDistance(Point source, Point dest) {
-
-    return sqrt(pow(X(source) - X(dest), 2) + pow(Y(dest) - Y(source), 2.0));
-}
 
 

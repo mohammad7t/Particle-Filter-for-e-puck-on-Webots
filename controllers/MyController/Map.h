@@ -13,7 +13,7 @@
 #include "Cell.h"
 #include ""
 
-#define RADIUS_ROBOT
+#define RADIUS_ROBOT 3.7 //cm
 
 
 class Map {
