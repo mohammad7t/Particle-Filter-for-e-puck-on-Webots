@@ -13,9 +13,13 @@ public:
     Accelerometer *accelerometer;
     int speed[2];
     int stepNumber;
+
     MainController();
+
     virtual ~MainController();
+
     void readSensorValues();
+
     void run();
 
     int nextStep();

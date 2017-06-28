@@ -4,7 +4,7 @@
 
 #include "Visualizer.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     MainController mainController;
     Visualizer visualizer(argc, argv);
     visualizer.runController(&mainController);

@@ -10,10 +10,15 @@
 class Visualizer {
 public:
     MainController *controller;
+
     void runController(MainController *controller);
+
     Visualizer(int argc, char **argv);
+
     void display();
+
     void idle();
+
     virtual ~Visualizer();
 };
 

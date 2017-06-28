@@ -20,9 +20,13 @@
 class SensorModel {
 public:
     SensorModel(void);
+
     ~SensorModel(void);
+
     double calculateProbabilityObservation(Particle particle, Observation observ, Map map);
+
     double calculateSensorProbabilityObservation(Point point, double observ, Map map);
+
     void readSensorModelFile();
 
     vector<vector<double>> meanSensorVector;

@@ -7,8 +7,11 @@ class Odometry {
 public:
     double a, d;
     DifferentialWheels *robot;
+
     void update();
-    Odometry(DifferentialWheels* robot);
+
+    Odometry(DifferentialWheels *robot);
+
     Odometry();
 };
 

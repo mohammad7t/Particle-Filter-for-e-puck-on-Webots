@@ -4,4 +4,3 @@
 
 #include <algorithm>
 #include "Point.h"
-

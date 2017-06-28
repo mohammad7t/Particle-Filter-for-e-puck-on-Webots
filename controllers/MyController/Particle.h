@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Point.h"
-class Particle
-{
+
+class Particle {
 public:
-	Particle(void);
-	~Particle(void);
-	Point position;
-	double angle;
+    Particle(void);
+
+    ~Particle(void);
+
+    Point position;
+    double angle;
 };
 

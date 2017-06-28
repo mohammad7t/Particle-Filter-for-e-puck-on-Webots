@@ -19,7 +19,7 @@ void SensorModel::readSensorModelFile() {
             string temp = "";
             vector<double> tempVector;
             meanSensorVector.push_back(tempVector);
-            while (index < (int)(line.length())) {
+            while (index < (int) (line.length())) {
                 if (line.at(index) == ',') {
                     double x = atof(temp.c_str());
                     cout << x << endl;
