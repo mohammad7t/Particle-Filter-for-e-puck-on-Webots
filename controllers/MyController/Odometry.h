@@ -2,6 +2,8 @@
 #define ODOMETRY_H
 
 #include "common.h"
+#include <webots/DifferentialWheels.hpp>
+using namespace webots;
 
 class Odometry {
 public:

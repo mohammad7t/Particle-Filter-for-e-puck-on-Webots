@@ -1,10 +1,9 @@
 #include <cstdlib>
 #include "SensorModel.h"
 
-
 SensorModel::SensorModel(void) {
     readSensorModelFile();
-
+    computeDistanceSensors();
 }
 
 void SensorModel::readSensorModelFile() {
@@ -22,7 +21,6 @@ void SensorModel::readSensorModelFile() {
             while (index < (int) (line.length())) {
                 if (line.at(index) == ',') {
                     double x = atof(temp.c_str());
-                    cout << x << endl;
                     meanSensorVector[i].push_back(x);
                     temp = "";
                 } else if (line.at(index) == '\n') {
@@ -58,12 +56,11 @@ void SensorModel::readSensorModelFile() {
             int index = 0;
             string temp = "";
             vector<double> tempVector;
-            meanSensorVector.push_back(tempVector);
+            stdDeviationSensorVector.push_back(tempVector);
             while (index < line.length()) {
                 if (line.at(index) == ',') {
                     double x = atof(temp.c_str());
-                    cout << x << endl;
-                    meanSensorVector[i].push_back(x);
+                    stdDeviationSensorVector[i].push_back(x);
                     temp = "";
                 } else if (line.at(index) == '\n') {
                     break;
@@ -76,10 +73,9 @@ void SensorModel::readSensorModelFile() {
         }
         varianceFile.close();
         cout << "read variance file finished" << endl;
-        for (int i = 0; i < meanSensorVector.size(); i++) {
+        for (int i = 0; i < stdDeviationSensorVector.size(); i++) {
             cout << "sensor " << i << ": ";
-            for (int j = 0; j < meanSensorVector[i].size(); j++) {
-
+            for (int j = 0; j < stdDeviationSensorVector[i].size(); j++) {
                 cout << stdDeviationSensorVector[i][j] << " ";
             }
             cout << endl;
@@ -115,5 +111,26 @@ double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
 }
 
 Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
-    return Gaussian();
+    Gaussian gaussian;
+    gaussian.mean = distance;
+    if (distance < 1) {
+        gaussian.sigma2 = stdDeviationSensorVector[sensorId][0];
+    } else if (distance > 7) {
+        gaussian.sigma2 = stdDeviationSensorVector[sensorId][6];
+    } else {
+        gaussian.sigma2 = (distance - floor(distance)) * stdDeviationSensorVector[sensorId][floor(distance)]
+                          + (ceil(distance) - distance) * stdDeviationSensorVector[sensorId][floor(distance) - 1];
+    }
+    cout<<"gausian s"<<sensorId<<" , "<<distance<<" = N("<<gaussian.mean<<","<<gaussian.sigma2<<")"<<endl;
+    return gaussian;
+}
+
+void SensorModel::computeDistanceSensors() {
+    distanceSensors = vector<vector<Gaussian>>(7, vector<Gaussian>(8, Gaussian(0, 0)));
+    for (int i=0; i<SENSORS; i++){
+        for (int j=0; j<7; j++){
+            distanceSensors[j][i].mean = meanSensorVector[i][j];
+            distanceSensors[j][i].sigma2 = pow(stdDeviationSensorVector[i][j], 2);
+        }
+    }
 }

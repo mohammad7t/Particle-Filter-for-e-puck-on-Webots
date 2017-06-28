@@ -4,6 +4,9 @@
 #include "Particle.h"
 #include "Observation.h"
 #include "Map.h"
+#include <cmath>
+#include "Observation.h"
+#include "Gaussian.h"
 
 // SENSOR ORIENTATION RADIAN
 #define S0_ORIENTATION 1.27
@@ -15,14 +18,12 @@
 #define S6_ORIENTATION 2.37
 #define S7_ORIENTATION 1.87
 
-#include <math.h>
-#include "Observation.h"
-#include "Gaussian.h"
 
 class SensorModel {
 public:
     vector<vector<double>> meanSensorVector;
     vector<vector<double>> stdDeviationSensorVector;
+    vector<vector<Gaussian>> distanceSensors;
 
     SensorModel(void);
 
@@ -33,6 +34,7 @@ public:
     double calculateSensorProbabilityObservation(Point point, double observ, Map map);
 
     void readSensorModelFile();
+    void computeDistanceSensors();
 
     double convertSingleSensorValue(int sensorId, double sensorValue); //returns cenitemeter value
     Gaussian getSensorGaussian(int sensorId, double distance);

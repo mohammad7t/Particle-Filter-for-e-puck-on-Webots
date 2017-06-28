@@ -27,7 +27,7 @@ set(SOURCE_FILES
         )
 
 add_executable(MyController main.cpp ${SOURCE_FILES})
-add_executable(playground playground.cpp ${SOURCE_FILES})
-
 target_link_libraries(MyController Controller CppController freeglut)
-target_link_libraries(playground Controller CppController freeglut)
+
+add_executable(MyPlayground playground.cpp ${SOURCE_FILES})
+target_link_libraries(MyPlayground Controller CppController freeglut)
