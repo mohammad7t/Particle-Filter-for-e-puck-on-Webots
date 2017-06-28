@@ -17,7 +17,7 @@
 
 #include <math.h>
 #include "Observation.h"
-#include ""
+#include "Gaussian.h"
 
 class SensorModel {
 public:
@@ -35,6 +35,7 @@ public:
     void readSensorModelFile();
 
     double convertSingleSensorValue(int sensorId, double sensorValue); //returns cenitemeter value
+    Gaussian getSensorGaussian(int sensorId, double distance);
     Observation sensorValuesToObservation(double *sensorValues);
 
 };

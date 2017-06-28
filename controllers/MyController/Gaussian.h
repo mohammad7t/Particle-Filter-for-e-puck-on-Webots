@@ -6,8 +6,13 @@
 #define MYCONTROLLER_GUASSIAN_H
 
 class Gaussian {
+public:
     double mean;
     double sigma2;
+
+    Gaussian(double mean, double sigma2);
+
+    Gaussian();
 
     double getProbability(double d);
 };

@@ -106,10 +106,14 @@ double SensorModel::calculateSensorProbabilityObservation(Point point, double ob
 SensorModel::~SensorModel(void) {
 }
 
-double SensorModel::convertSingleSensorValue(double sensorValue) {
+Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
+    return Observation();
+}
+
+double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
     return 0;
 }
 
-Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
-    return Observation();
+Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
+    return Gaussian();
 }
