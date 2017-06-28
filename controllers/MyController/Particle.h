@@ -2,7 +2,8 @@
 
 #include "Point.h"
 #include "Action.h"
-#include "Map.h"
+
+class Map;
 
 class Particle {
 public:
