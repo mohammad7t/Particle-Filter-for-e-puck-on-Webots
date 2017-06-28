@@ -105,3 +105,11 @@ double SensorModel::calculateSensorProbabilityObservation(Point point, double ob
 
 SensorModel::~SensorModel(void) {
 }
+
+double SensorModel::convertSingleSensorValue(double sensorValue) {
+    return 0;
+}
+
+Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
+    return Observation();
+}

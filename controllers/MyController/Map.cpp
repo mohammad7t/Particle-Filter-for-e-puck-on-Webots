@@ -111,3 +111,7 @@ double Map::distanceToNearestObstacle(Point pos, double angle, Map map) {
 
 Map::~Map(void) {
 }
+
+double Map::getObservationProbability(Particle *particle, Observation *observation) {
+    return 0;
+}

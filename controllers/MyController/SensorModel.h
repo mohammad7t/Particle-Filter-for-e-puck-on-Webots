@@ -16,9 +16,14 @@
 #define S7_ORIENTATION 1.87
 
 #include <math.h>
+#include "Observation.h"
+#include ""
 
 class SensorModel {
 public:
+    vector<vector<double>> meanSensorVector;
+    vector<vector<double>> stdDeviationSensorVector;
+
     SensorModel(void);
 
     ~SensorModel(void);
@@ -29,7 +34,8 @@ public:
 
     void readSensorModelFile();
 
-    vector<vector<double>> meanSensorVector;
-    vector<vector<double>> stdDeviationSensorVector;
+    double convertSingleSensorValue(double sensorValue); //returns cenitemeter value
+    Observation sensorValuesToObservation(double *sensorValues);
+
 };
 

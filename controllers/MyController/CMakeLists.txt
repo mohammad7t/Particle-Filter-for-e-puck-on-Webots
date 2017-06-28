@@ -22,6 +22,8 @@ set(SOURCE_FILES
         SensorModel.cpp SensorModel.h
         Observation.cpp Observation.h
         Point.cpp Point.h
+        Map.cpp Map.h
+        Gaussian.cpp Gaussian.h
         )
 
 add_executable(MyController main.cpp ${SOURCE_FILES})
