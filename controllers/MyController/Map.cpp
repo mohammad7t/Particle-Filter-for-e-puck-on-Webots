@@ -79,6 +79,7 @@ void Map::readMapFile() {
 bool Map::isObstacle(double x, double y) {
     int cellX = (int) (x / (1 / scale));
     int cellY = (int) (y / (1 / scale));
+    cout<< "isObstacle: cell=["<<cellX<<","<<cellY<<"]"<<endl;
     for (int i = 0; i < obstacles.size(); i++) {
         if (obstacles[i].first == cellX && obstacles[i].second == cellY)
             return true;
@@ -86,7 +87,7 @@ bool Map::isObstacle(double x, double y) {
     return false;
 }
 
-double Map::distanceToNearestObstacle(Point pos, double angle, Map map) {
+double Map::distanceToNearestObstacle(Point pos, double angle) {
     double step = 0.1;
     double nextX, nextY;
     nextX = pos.real();
@@ -94,14 +95,14 @@ double Map::distanceToNearestObstacle(Point pos, double angle, Map map) {
 
     int i = 0;
     while (true) {
-
+        cout<<"distanceToNearestObstacle: nextX="<<nextX<<"\tnextY="<<nextY<<endl;
         nextX = nextX + cos(angle) * step;
-        nextY = nextY + sin(angle) * step;
+        nextY = nextY - sin(angle) * step;
 
         if (nextX < 0 || nextX > width * (1 / scale) || nextY < 0 || nextY > height * (1 / scale)) {
             return step * (i - 1);
         }
-        if (map.isObstacle(nextX, nextY)) {
+        if (isObstacle(nextX, nextY)) {
             return step * (i);
         }
         i += 1;
@@ -112,6 +113,3 @@ double Map::distanceToNearestObstacle(Point pos, double angle, Map map) {
 Map::~Map(void) {
 }
 
-double Map::getObservationProbability(Particle *particle, Observation *observation) {
-    return 0;
-}

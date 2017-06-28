@@ -40,5 +40,6 @@ public:
     Gaussian getSensorGaussian(int sensorId, double distance);
     Observation sensorValuesToObservation(double *sensorValues);
 
+    double getObservationProbability(Particle *particle, Observation *observation,Map *world);
 };
 

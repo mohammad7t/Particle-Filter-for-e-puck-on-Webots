@@ -9,6 +9,7 @@ public:
     ~Particle(void);
 
     Point position;
+
     double angle;
 };
 
