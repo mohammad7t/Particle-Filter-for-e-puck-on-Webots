@@ -175,6 +175,14 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
 
     cout<<"getObservationProbability: result="<<prob<<endl;
     return prob;
+}
 
-
+void SensorModel::computeDistanceSensors() {
+    distanceSensors = vector<vector<Gaussian>>(7, vector<Gaussian>(8, Gaussian(0, 0)));
+    for (int i=0; i<SENSORS; i++){
+        for (int j=0; j<7; j++){
+            distanceSensors[j][i].mean = meanSensorVector[i][j];
+            distanceSensors[j][i].sigma2 = pow(stdDeviationSensorVector[i][j], 2);
+        }
+    }
 }
