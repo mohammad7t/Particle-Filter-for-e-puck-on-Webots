@@ -15,6 +15,7 @@ const double AXLE_LENGTH = 0.052;
 const double ENCODER_RESOLUTION = 159.23;
 const int RANGE = (1024 / 2);
 const int SENSORS = 8; //
+const int DISTANCES = 7;
 const double ROBOT_RADIUS = 3.7;
 
 #define X(point) ((point).real())

@@ -65,7 +65,7 @@ void SensorModel::readSensorModelFile() {
             while (index < line.length()) {
                 if (line.at(index) == ',') {
                     double x = atof(temp.c_str());
-                    stdDeviationSensorVector[i].push_back(pow(x,2.0));
+                    stdDeviationSensorVector[i].push_back(pow(x, 2.0));
                     temp = "";
                 } else if (line.at(index) == '\n') {
 
@@ -113,11 +113,23 @@ SensorModel::~SensorModel(void) {
 }
 
 Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
-    return Observation();
+    Observation result(SENSORS, 0.0);
+    for (int i = 0; i < SENSORS; i++) {
+        result[i] = convertSingleSensorValue(i, sensorValues[i]);
+    }
+    return result;
 }
 
 double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
-    return 0;
+    vector<Gaussian> &gaussians = distanceSensors[sensorId];
+    int slopeBegin = 0;
+    for (; slopeBegin < DISTANCES - 1; slopeBegin++) {
+        if (gaussians[slopeBegin + 1].mean <= sensorValue) {
+            break;
+        }
+    }
+    return fabs(sensorValue - gaussians[slopeBegin].mean) * (slopeBegin + 1) +
+           fabs(sensorValue - gaussians[slopeBegin + 1].mean) * slopeBegin;
 }
 
 Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
@@ -128,19 +140,20 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
     } else if (distance > 7) {
         gaussian.sigma2 = stdDeviationSensorVector[sensorId][6];
     } else {
-        int lower = floor(distance);
-        int upper = ceil(distance);
-        if (lower==upper){
-            upper+=1;
+        int lower = (int) floor(distance);
+        int upper = (int) ceil(distance);
+        if (lower == upper) {
+            upper += 1;
         }
         gaussian.sigma2 = (distance - lower) * stdDeviationSensorVector[sensorId][upper]
                           + (upper - distance) * stdDeviationSensorVector[sensorId][lower];
     }
-    if (gaussian.sigma2 < 0.0001){
-        cout<< "=======================" << endl;
+    if (gaussian.sigma2 < 0.0001) {
+        cout << "=======================" << endl;
         cout << distance << endl;
     }
-    cout<<"gausian s"<<sensorId<<" , "<<distance<<" = N("<<gaussian.mean<<","<<gaussian.sigma2<<")"<<endl;
+    cout << "gausian s" << sensorId << " , " << distance << " = N(" << gaussian.mean << "," << gaussian.sigma2 << ")"
+         << endl;
     return gaussian;
 }
 
@@ -164,23 +177,23 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
     double distanceSensor8 = world->distanceToNearestObstacle(particle->position,
                                                               particle->angle - M_PI / 2 + S7_ORIENTATION);
 
-    double prob =getSensorGaussian(0, distanceSensor1).getProbability(observation[0][0]) *
-            getSensorGaussian(1, distanceSensor2).getProbability(observation[0][1]) *
-            getSensorGaussian(2, distanceSensor3).getProbability(observation[0][2]) *
-            getSensorGaussian(3, distanceSensor4).getProbability(observation[0][3]) *
-            getSensorGaussian(4, distanceSensor5).getProbability(observation[0][4]) *
-            getSensorGaussian(5, distanceSensor6).getProbability(observation[0][5]) *
-            getSensorGaussian(6, distanceSensor7).getProbability(observation[0][6]) *
-            getSensorGaussian(7, distanceSensor8).getProbability(observation[0][7]);
+    double prob = getSensorGaussian(0, distanceSensor1).getProbability(observation[0][0]) *
+                  getSensorGaussian(1, distanceSensor2).getProbability(observation[0][1]) *
+                  getSensorGaussian(2, distanceSensor3).getProbability(observation[0][2]) *
+                  getSensorGaussian(3, distanceSensor4).getProbability(observation[0][3]) *
+                  getSensorGaussian(4, distanceSensor5).getProbability(observation[0][4]) *
+                  getSensorGaussian(5, distanceSensor6).getProbability(observation[0][5]) *
+                  getSensorGaussian(6, distanceSensor7).getProbability(observation[0][6]) *
+                  getSensorGaussian(7, distanceSensor8).getProbability(observation[0][7]);
 
-    cout<<"getObservationProbability: result="<<prob<<endl;
+    cout << "getObservationProbability: result=" << prob << endl;
     return prob;
 }
 
 void SensorModel::computeDistanceSensors() {
     distanceSensors = vector<vector<Gaussian>>(7, vector<Gaussian>(8, Gaussian(0, 0)));
-    for (int i=0; i<SENSORS; i++){
-        for (int j=0; j<7; j++){
+    for (int i = 0; i < SENSORS; i++) {
+        for (int j = 0; j < 7; j++) {
             distanceSensors[j][i].mean = meanSensorVector[i][j];
             distanceSensors[j][i].sigma2 = pow(stdDeviationSensorVector[i][j], 2);
         }
