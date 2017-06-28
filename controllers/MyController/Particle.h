@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Point.h"
+#include "Action.h"
+#include "Map.h"
 
 class Particle {
 public:
@@ -11,5 +13,9 @@ public:
     Point position;
 
     double angle;
+
+    double weight;
+
+    void doAction(Action action,Map *world);
 };
 

@@ -65,7 +65,7 @@ void SensorModel::readSensorModelFile() {
             while (index < line.length()) {
                 if (line.at(index) == ',') {
                     double x = atof(temp.c_str());
-                    stdDeviationSensorVector[i].push_back(x);
+                    stdDeviationSensorVector[i].push_back(pow(x,2.0));
                     temp = "";
                 } else if (line.at(index) == '\n') {
 

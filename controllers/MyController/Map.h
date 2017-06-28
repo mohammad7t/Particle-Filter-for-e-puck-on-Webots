@@ -9,7 +9,7 @@
 #include "Particle.h"
 #include "common.h"
 #include "Observation.h"
-
+#include <set>
 
 class Map {
 public:
@@ -20,6 +20,7 @@ public:
 
     vector<vector<bool> > mapVector;
     vector<pair<int, int> > obstacles;
+    vector<vector<int > > canBeAt;
 
     Map(void);
 
@@ -30,6 +31,10 @@ public:
     double distanceToNearestObstacle(Point pos, double angle    );
     void readEnviroment();
     void readMapFile();
+
+
+    void assignCanBeAt();
+
 
 
 
