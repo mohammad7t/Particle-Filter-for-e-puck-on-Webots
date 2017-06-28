@@ -99,10 +99,10 @@ double Map::distanceToNearestObstacle(Point pos, double angle, Map map) {
         nextY = nextY + sin(angle) * step;
 
         if (nextX < 0 || nextX > width * (1 / scale) || nextY < 0 || nextY > height * (1 / scale)) {
-            return step * (i);
+            return step * (i - 1);
         }
         if (map.isObstacle(nextX, nextY)) {
-            return step * (i + 1);
+            return step * (i);
         }
         i += 1;
     }

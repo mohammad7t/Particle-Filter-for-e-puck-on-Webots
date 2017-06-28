@@ -6,8 +6,7 @@
 #include<utility>
 #include<vector>
 #include "Particle.h"
-
-using namespace std;
+#include "common.h"
 
 class Map {
 public:
@@ -19,7 +18,6 @@ public:
                     double y); //parameter : real position x and y then compute cell that contain this position then return is it obstacle or not
     double distanceToNearestObstacle(Point pos, double angle, Map map);
 
-private:
     int width;
     int height;
     int scale;
