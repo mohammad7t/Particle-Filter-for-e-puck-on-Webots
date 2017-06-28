@@ -21,7 +21,8 @@ set(SOURCE_FILES
         Particle.cpp Particle.h
         SensorModel.cpp SensorModel.h
         Observation.cpp Observation.h
-        Point.cpp Point.h playground.cpp)
+        Point.cpp Point.h
+        )
 
 add_executable(MyController main.cpp ${SOURCE_FILES})
 add_executable(playground playground.cpp ${SOURCE_FILES})
