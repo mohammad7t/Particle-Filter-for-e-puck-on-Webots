@@ -76,6 +76,7 @@ void Map::readMapFile() {
         }
         cout<<endl;
     }*/
+
 }
 
 bool Map::isObstacle(double x, double y) {

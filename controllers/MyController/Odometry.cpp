@@ -15,3 +15,13 @@ void Odometry::update() {
     d = (dr + dl) / 2;
 }
 
+Action Odometry::getAction() {
+    Action action;
+    action.distance = d - lastD;
+    action.rotateRadian = a - lastA;
+    lastD = d;
+    lastA = a;
+
+    return action;
+}
+

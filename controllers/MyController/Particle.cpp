@@ -16,10 +16,10 @@ void Particle::doAction(Action *action, Map *world) {
     for (int j = 0; j < iteration; ++j) {
         cout << "distanceToNearestObstacle: nextX=" << nextX << "\tnextY=" << nextY << endl;
         nextX = nextX + cos(angle) * step;
-        nextY = nextY - sin(angle) * step;
+        nextY = nextY + sin(angle) * step;
 
-        if (nextX < 0 || nextX > world->width * (1 / world->scale) || nextY < 0 ||
-            nextY > world->height * (1 / world->scale)) {
+        if (nextX < 0 || nextX > world->realWidth || nextY < 0 ||
+            nextY > world->realHeight) {
             break;
         }
         if (world->canRobotAt(nextX, nextY)) {
