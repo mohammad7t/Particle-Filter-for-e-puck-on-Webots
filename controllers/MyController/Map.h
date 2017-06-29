@@ -44,6 +44,10 @@ public:
 
     void readMapFile(const char *mapFileName);
 
+    void writeCanBeAtInFile();
+
+    bool readCanBeAtFromFile();
+
 
     void assignCanBeAt();
 
