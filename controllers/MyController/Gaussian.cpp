@@ -13,7 +13,9 @@ double Gaussian::getProbability(double x) {
 //    cout << "getProbability: mean= " << mean << endl;
 //    cout << "getProbability: var= " << sigma2 << endl;
 //    cout << "getProbability: result= " << exp(-pow(x - mean, 2.0) / 2 / sigma2) / sqrt(2 * M_PI * sigma2) << endl;
-    return exp(-pow(x - mean, 2.0) / 2 / sigma2) / sqrt(2 * M_PI * sigma2);
+
+    //return exp(-pow(x - mean, 2.0) / 2 / sigma2) / sqrt(2 * M_PI * sigma2);
+    return 1 / (abs(mean - x) + 1);
 }
 
 Gaussian::Gaussian(double mean, double sigma2) : mean(mean), sigma2(sigma2) {}

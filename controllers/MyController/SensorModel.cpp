@@ -100,15 +100,16 @@ SensorModel::~SensorModel(void) {
 }
 
 Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
-    cout << "line koooft " << endl;
     Observation result(SENSORS, 0.0);
     for (int i = 0; i < SENSORS; i++) {
-        cout << "line koooft " << i << endl;
         result[i] = convertSingleSensorValue(i, sensorValues[i]);
-        cout << "line koooft ! " << i << endl;
     }
-    cout << "line koooft finish" << endl;
     return result;
+}
+
+double interpolate(double x1, double y1, double x2, double y2, double xQuery) {
+    double dx = fabs(x1 - x2);
+    return fabs(x1 - xQuery) / dx * y2 + fabs(x2 - xQuery) / dx * y1;
 }
 
 double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
@@ -121,9 +122,9 @@ double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
             break;
         }
     }
-//    cout<<"out for loop"<<endl;
-    return fabs(sensorValue - gaussians[slopeBegin].mean) * (slopeBegin + 1) +
-           fabs(sensorValue - gaussians[slopeBegin + 1].mean) * slopeBegin;
+    return interpolate(gaussians[slopeBegin].mean, slopeBegin,
+                       gaussians[slopeBegin + 1].mean, slopeBegin + 1,
+                       sensorValue);
 }
 
 Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
@@ -131,7 +132,7 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
     gaussian.mean = distance;
     if (distance <= 1) {
         gaussian.sigma2 = stdDeviationSensorVector[sensorId][0];
-    } else if (distance > 7) {
+    } else if (distance >= 7 - 1e9) {
         gaussian.sigma2 = stdDeviationSensorVector[sensorId][6];
     } else {
         int lower = (int) floor(distance);
@@ -143,8 +144,7 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
                           + (upper - distance) * stdDeviationSensorVector[sensorId][lower];
     }
     if (gaussian.sigma2 < 0.0001) {
-        cout << "=======================" << endl;
-        cout << distance << endl;
+        cout << "===================================== " << distance << endl;
     }
 //    cout << "gausian s" << sensorId << " , " << distance << " = N(" << gaussian.mean << "," << gaussian.sigma2 << ")"
 //         << endl;
@@ -180,7 +180,6 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
                   getSensorGaussian(6, distanceSensor7).getProbability(observation[0][6]) *
                   getSensorGaussian(7, distanceSensor8).getProbability(observation[0][7]);
 
-    cout << "getObservationProbability: result=" << prob << endl;
     return prob;
 }
 

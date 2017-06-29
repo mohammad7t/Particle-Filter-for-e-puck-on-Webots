@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include <math.h>
+#include <vector>
 
 using namespace std;
 
@@ -24,5 +25,7 @@ const double RADIUS_ROBOT = 3.7;
 double randZeroToOne();
 
 double randMToN(double M, double N);
+
+std::ostream &operator<<(std::ostream &out, const vector<double> &rhs);
 
 #endif // COMMON_H_INCLUDED

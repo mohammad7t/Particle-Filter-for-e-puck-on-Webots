@@ -5,6 +5,7 @@
 #include "Visualizer.h"
 #include <windows.h>  // For MS Windows
 #include <GL/glut.h>  // GLUT, includes glu.h and gl.h
+#include <ctime>
 
 Visualizer *_singleton = NULL;
 
@@ -23,8 +24,6 @@ void _idle() {
 }
 
 Visualizer::Visualizer(int argc, char **argv) {
-    cout << "here!!!" << endl;
-    // FreeConsole();
     glutInit(&argc, argv);                 // Initialize GLUT
     glutCreateWindow("OpenGL Setup Test"); // Create a window with the given title
     glutInitWindowSize(320, 320);   // Set the window's initial width & height
@@ -54,9 +53,9 @@ void Visualizer::display() {
      /**/
 
     /**/
-    for (int i=0; i<map->height; i++){
+    for (int i = 0; i < map->height; i++) {
         for (int j = 0; j < map->width; ++j) {
-            if (!map->canRobotBeAt(map->getCenterCell(i, j))){
+            if (!map->canRobotBeAt(map->getCenterCell(i, j))) {
                 drawCell(i, j);
             }
         }
@@ -70,7 +69,7 @@ void Visualizer::display() {
         glColor3f(0, 0, 1.0f); // Blue
         Point base = particle.position;
         double angle = particle.angle;
-        const double a = map->unit * 2;
+        const double a = map->unit * 2 / 3;
         const double b = 3 * a;
         Point rotator = unitAngle(angle - M_PI_2);
         vertexPoint(Point(a, 0) * rotator + base);
@@ -102,10 +101,27 @@ void Visualizer::runController(MainController *controller) {
     glutMainLoop();
 }
 
+bool playgroundOnce = false;
+
 void Visualizer::idle() {
     if (this->controller) {
         this->controller->nextStep();
-    }
+        glutPostRedisplay();
+    } else {
+        // playground:
+        if (playgroundOnce)
+            return;
+        else
+            playgroundOnce = true;
+
+        cout << "here~~~~~~~~~~~" << endl;
+        double sensorValues[] = {15.0361, 48.8763, 57.569, 221.986, 235.146, 482.005, 107.171, 16.7376};
+        Observation observation = particleFilter->sensorModel->sensorValuesToObservation(sensorValues);
+        cout << observation << endl;
+        particleFilter->updateWeights(observation);
+        particleFilter->reSampling();
+        _sleep(2000);
+        glutPostRedisplay();
 
 //    for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
 //        Action action;
@@ -114,8 +130,8 @@ void Visualizer::idle() {
 //        particleFilter->particleSet[i].doAction(&action,map);
 ////        cout<<"particle "<<i<<":"<<particleFilter->particleSet[i].position<<endl;
 //    }
-    glutPostRedisplay();
 //    _sleep(2000);
+    }
 }
 
 void Visualizer::visualize(ParticleFilter *particleFilter) {

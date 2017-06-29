@@ -38,9 +38,10 @@ int MainController::nextStep() {
     cout << "************************************** " << stepNumber << endl;
     stepNumber++;
     readSensorValues();
-//    for (int i = 0; i < SENSORS; i++) {
-//        cout << sensorValue[i] << ' ';
-//    }
+    for (int i = 0; i < SENSORS; i++) {
+        cout << sensorValue[i] << ',';
+    }
+    cout << endl;
 
     if (stepNumber % 10 == 0) {
 
