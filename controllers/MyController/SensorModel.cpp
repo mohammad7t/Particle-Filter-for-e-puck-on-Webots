@@ -96,19 +96,6 @@ void SensorModel::readSensorModelFile() {
     }
 }
 
-double SensorModel::calculateProbabilityObservation(Particle particle, Observation observ, Map map) {
-    double p0 = 0.0;
-    Point vec = ROBOT_RADIUS * exp(Point(0, S0_ORIENTATION));
-    Point &point = particle.position;
-    Point pos0 = point + vec;
-    return 0.0;
-}
-
-double SensorModel::calculateSensorProbabilityObservation(Point point, double observ, Map map) {
-    //map.distanceToNearestObstacle(pos0, S0_ORIENTATION - (M_PI / 2));
-    return 0.0;
-}
-
 SensorModel::~SensorModel(void) {
 }
 

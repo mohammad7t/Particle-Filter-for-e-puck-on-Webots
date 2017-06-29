@@ -24,6 +24,7 @@ set(SOURCE_FILES
         Point.cpp Point.h
         Map.cpp Map.h
         Gaussian.cpp Gaussian.h
+        ParticleFilter.cpp ParticleFilter.h
         )
 
 add_executable(MyController main.cpp ${SOURCE_FILES})
