@@ -20,7 +20,8 @@ ParticleFilter::ParticleFilter(uint particleSize, Map *map, SensorModel *sensorM
 }
 
 void ParticleFilter::updateWeights(Observation &observation) {
-    for (auto &particle : particleSet) {
+    for (int i = 0; i < particleSet.size(); i++) {
+        Particle &particle = particleSet[i];
         particle.weight = sensorModel->getObservationProbability(&particle, &observation, map);
     }
 }
