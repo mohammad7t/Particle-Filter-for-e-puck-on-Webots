@@ -46,11 +46,14 @@ void Visualizer::display() {
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glColor3f(1.0f, 0.0f, 0.0f); // Red
+
+    /**
     for (int i = 0; i < map->obstacles.size(); i++) {
         drawCell(map->obstacles[i].first, map->obstacles[i].second);
     }
+     /**/
 
-    /*
+    /**/
     for (int i=0; i<map->height; i++){
         for (int j = 0; j < map->width; ++j) {
             if (!map->canRobotBeAt(map->getCenterCell(i, j))){
@@ -58,7 +61,7 @@ void Visualizer::display() {
             }
         }
     }
-     */
+    /**/
 
     cout << particleFilter->particleSet.size() << endl;
     for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
@@ -103,6 +106,16 @@ void Visualizer::idle() {
     if (this->controller) {
         this->controller->nextStep();
     }
+
+//    for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
+//        Action action;
+//        action.distance =10;
+//        action.rotateRadian =0;
+//        particleFilter->particleSet[i].doAction(&action,map);
+////        cout<<"particle "<<i<<":"<<particleFilter->particleSet[i].position<<endl;
+//    }
+    glutPostRedisplay();
+//    _sleep(2000);
 }
 
 void Visualizer::visualize(ParticleFilter *particleFilter) {

@@ -54,5 +54,7 @@ public:
     bool canRobotBeAt(const Point &point);
 
     Point getCenterCell(int row, int col);
+
+    void trim(int width, int height);
 };
 

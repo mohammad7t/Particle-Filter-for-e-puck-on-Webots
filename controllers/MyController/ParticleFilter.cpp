@@ -45,11 +45,8 @@ void ParticleFilter::reSampling() {
         accumulative += particleSet[i].weight;
         weightsDivider.push_back(accumulative);
     }
-    //generate random double
-    uniform_real_distribution<double> distribution(0, sumWeight);
-    mt19937 rng;
-    rng.seed(std::random_device{}());
-    double randomNumber = distribution(rng);
+
+    double randomNumber = randMToN(0, sumWeight);
 
 
     double step = sumWeight / particleSet.size();

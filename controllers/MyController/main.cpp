@@ -9,6 +9,6 @@ int main(int argc, char **argv) {
     Visualizer visualizer(argc, argv);
     visualizer.visualize(&particleFilter);
     visualizer.runController(&mainController);
-    visualizer.runWithoutController();
+//    visualizer.runWithoutController();
     return 0;
 }

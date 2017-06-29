@@ -100,6 +100,9 @@ Map::~Map(void) {
 void Map::assignCanBeAt() {
     canBeAt = vector<vector<bool>>(height, vector<bool>(width, true));
 
+    cout << "width=" << canBeAt[0].size() << endl;
+    cout << "height=" << canBeAt.size() << endl;
+
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < obstacles.size(); k++) {
@@ -126,6 +129,7 @@ Point Map::cell2point(int row, int col) {
 
 bool Map::canRobotBeAt(double x, double y) {
     Cell centerCell = point2cell(x, y);
+//    cout<<"canRobotBeAt: "<<centerCell.first<<","<<centerCell.second<<endl;
     return canBeAt[centerCell.first][centerCell.second];
 }
 

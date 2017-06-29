@@ -37,9 +37,9 @@ void MainController::readSensorValues() {
 int MainController::nextStep() {
     stepNumber++;
     readSensorValues();
-    for (int i = 0; i < SENSORS; i++) {
-        cout << sensorValue[i] << ' ';
-    }
+//    for (int i = 0; i < SENSORS; i++) {
+//        cout << sensorValue[i] << ' ';
+//    }
 
     if (stepNumber % 10 == 0) {
 
@@ -51,21 +51,21 @@ int MainController::nextStep() {
         speed[0] = 100;
         speed[1] = 100;
     }
-    const double braitenberg_coefficients[8][2] =
-            {{150, -35},
-             {100, -15},
-             {80,  -10},
-             {-10, -10},
-             {-10, -10},
-             {-10, 80},
-             {-30, 100},
-             {-20, 150}};
-    for (int i = 0; i < 2; i++) {
-        speed[i] = 0.0;
-        for (int j = 0; j < 8; j++) {
-            speed[i] += braitenberg_coefficients[j][i] * (1.0 - (sensor[j]->getValue() / RANGE));
-        }
-    }
+//    const double braitenberg_coefficients[8][2] =
+//            {{150, -35},
+//             {100, -15},
+//             {80,  -10},
+//             {-10, -10},
+//             {-10, -10},
+//             {-10, 80},
+//             {-30, 100},
+//             {-20, 150}};
+//    for (int i = 0; i < 2; i++) {
+//        speed[i] = 0.0;
+//        for (int j = 0; j < 8; j++) {
+//            speed[i] += braitenberg_coefficients[j][i] * (1.0 - (sensor[j]->getValue() / RANGE));
+//        }
+//    }
     setSpeed(speed[0], speed[1]);
     return step(TIME_STEP);
 }
