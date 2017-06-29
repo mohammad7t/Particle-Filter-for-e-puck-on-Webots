@@ -13,9 +13,9 @@ ParticleFilter::ParticleFilter(const vector<Particle> &particleSet, Map *map, Se
 
 ParticleFilter::ParticleFilter(uint particleSize, Map *map, SensorModel *sensorModel) : map(map),
                                                                                         sensorModel(sensorModel) {
-    vector<Particle> particles(particleSize);
+    particleSet.reserve(particleSize);
     for (uint i = 0; i < particleSize; i++) {
-        particles[i] = map->generateRandomParticle();
+        particleSet.push_back(map->generateRandomParticle());
     }
 }
 

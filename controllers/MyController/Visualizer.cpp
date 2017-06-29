@@ -35,36 +35,45 @@ Visualizer::Visualizer(int argc, char **argv) {
 }
 
 void Visualizer::display() {
+    glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
+
     if (!doDisplay) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-        glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
         glFlush();  // Render now
         glutSwapBuffers();
         return;
     }
 
-    //glClearColor(1.0f,1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
-
-    for (int i = 0; i < map->height; i++) {
-        for (int j = 0; j < map->width; j++) {
-            glBegin(GL_QUADS);
-            if (map->mapVector[i][j]) {
-                glColor3f(1.0f, 0.0f, 0.0f); // Red
-            } else {
-                glColor3f(1.0f, 1.0f, 1.0f); // white
-            }
-
-            Point base = map->unit * Point(map->width - 1 - j, i);
-            vertexPoint(base + Point(0, 0));
-            vertexPoint(base + Point(0, map->unit));
-            vertexPoint(base + Point(map->unit, map->unit));
-            vertexPoint(base + Point(map->unit, 0));
-            glEnd();
-            //break;
-        }
-        //break;
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    for (int i = 0; i < map->obstacles.size(); i++) {
+        int row = map->obstacles[i].second, col = map->obstacles[i].first;
+        glBegin(GL_QUADS);
+        Point base = map->unit * Point(col, map->height - 1 - row);
+        vertexPoint(base + Point(0, 0));
+        vertexPoint(base + Point(0, map->unit));
+        vertexPoint(base + Point(map->unit, map->unit));
+        vertexPoint(base + Point(map->unit, 0));
+        glEnd();
     }
+
+    cout << particleFilter->particleSet.size() << endl;
+    for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
+        Particle &particle = particleFilter->particleSet[i];
+        glBegin(GL_TRIANGLES);
+        glColor3f(0, 0, 1.0f); // Blue
+        Point base = particle.position;
+        cout << base << endl;
+        double angle = particle.angle;
+        const double a = map->unit * 2;
+        const double b = 3 * a;
+        Point rotator = unitAngle(angle - M_PI_2);
+        vertexPoint(Point(a, 0) * rotator + base);
+        vertexPoint(Point(0, b) * rotator + base);
+        vertexPoint(Point(-a, 0) * rotator + base);
+        glEnd();
+    }
+
     glFlush();  // Render now
     glutSwapBuffers();
 }

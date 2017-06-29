@@ -12,9 +12,6 @@
 #include <set>
 #include "Cell.h"
 
-#define RADIUS_ROBOT 3.7 //cm
-
-
 class Map {
 public:
     int width;
@@ -23,7 +20,6 @@ public:
     double unit;
     double realWidth;
     double realHeight;
-    bool **mapArray;
 
     vector<vector<bool> > mapVector;
     vector<pair<int, int> > obstacles;
@@ -33,9 +29,11 @@ public:
 
     ~Map(void);
 
-    Cell getCell(double x, double y); //convert continious to discrete
-    Point getCenterCell(int x, int y);//convert discrete to continious
+    Cell point2cell(double x, double y); //convert continious to discrete
+    Cell point2cell(const Point &point);
 
+    Point cell2point(int x, int y);//convert discrete to continious
+    Point getCenterCell(const Cell &cell);
 
 
     bool isObstacle(double x,
@@ -51,5 +49,7 @@ public:
 
     Particle generateRandomParticle();
     bool canRobotAt(double d, double d1);
+
+    bool canRobotAt(const Point &point);
 };
 

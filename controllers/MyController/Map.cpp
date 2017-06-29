@@ -28,11 +28,9 @@ void Map::readMapFile() {
 
 
         vector<bool> tempVector;
-        mapArray = new bool *[height];
         for (int i = 0; i < height; i++) {
             string line;
             getline(mapFile, line);
-            mapArray[i] = new bool[width];
             tempVector.clear();
             mapVector.push_back(tempVector);
             int index = 0;
@@ -46,12 +44,10 @@ void Map::readMapFile() {
                 } else if (line.at(index) == '\n') {
                     break;
                 } else if (line.at(index) == '1') {
-                    mapArray[i][j] = true;
                     mapVector[i].push_back(true);
-                    obstacles.push_back(pair<int, int>(j, i));
+                    obstacles.push_back(pair<int, int>(i, j));
                     j += 1;
                 } else if (line.at(index) == '0') {
-                    mapArray[i][j] = false;
                     mapVector[i].push_back(false);
                     j += 1;
                 }
@@ -64,26 +60,12 @@ void Map::readMapFile() {
 
     }
     cout << "read map finished" << endl;
-    /*cout<<"mapVector size="<<mapVector.size()<<endl;
-    cout<<"mapVector[0] size="<<mapVector.at(0).size()<<endl;
-    */
-    /*for(int i=0;i<height;i++){
-        for(int j=0;j<width;j++){
-            if(mapArray[i][j])
-                cout<<"1";
-            else
-                cout<<"0";
-        }
-        cout<<endl;
-    }*/
 }
 
 bool Map::isObstacle(double x, double y) {
-    int cellX = (int) (x / (1 / scale));
-    int cellY = (int) (y / (1 / scale));
-    cout << "isObstacle: cell=[" << cellX << "," << cellY << "]" << endl;
+    Cell cell = point2cell(x, y);
     for (int i = 0; i < obstacles.size(); i++) {
-        if (obstacles[i].first == cellX && obstacles[i].second == cellY)
+        if (obstacles[i].first == cell.first && obstacles[i].second == cell.second)
             return true;
     }
     return false;
@@ -99,9 +81,9 @@ double Map::distanceToNearestObstacle(Point pos, double angle) {
     while (true) {
         // cout << "distanceToNearestObstacle: nextX=" << nextX << "\tnextY=" << nextY << endl;
         nextX = nextX + cos(angle) * step;
-        nextY = nextY - sin(angle) * step;
+        nextY = nextY + sin(angle) * step;
 
-        if (nextX < 0 || nextX > width * (1 / scale) || nextY < 0 || nextY > height * (1 / scale)) {
+        if (nextX < 0 || nextX > realWidth || nextY < 0 || nextY > realHeight) {
             return step * (i - 1);
         }
         if (isObstacle(nextX, nextY)) {
@@ -121,7 +103,7 @@ void Map::assignCanBeAt() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < obstacles.size(); k++) {
-                if (abs(Point(i, j) - Point(obstacles[k].first, obstacles[k].second)) > RADIUS_ROBOT) {
+                if (abs(cell2point(i, j) - getCenterCell(obstacles[k])) > RADIUS_ROBOT) {
                     canBeAt[i][j] = false;
                     break;
                 }
@@ -131,27 +113,40 @@ void Map::assignCanBeAt() {
 
 }
 
-Cell Map::getCell(double x, double y) {
-    int cellX = (int) (x / (1 / scale));
-    int cellY = (int) (y / (1 / scale));
-    return Cell(cellY, cellX);
-
+Cell Map::point2cell(double x, double y) {
+    int xx = (int) (x / unit);
+    int yy = (int) (y / unit);
+    return Cell(height - 1 - yy, xx);
 }
 
-Point Map::getCenterCell(int x, int y) {
-
-    return Point(x * 1 / scale + 1 / scale / 2);
+Point Map::cell2point(int row, int col) {
+    return unit * Point(col, height - row - 1);
 }
+
 
 bool Map::canRobotAt(double x, double y) {
-    Cell centerCell = getCell(x, y);
+    Cell centerCell = point2cell(x, y);
 
-    return canBeAt[centerCell.second][centerCell.first];
+    return canBeAt[centerCell.first][centerCell.second];
 }
 
 Particle Map::generateRandomParticle() {
     Particle result;
-    result.position = Point(randMToN(0, width / scale), randMToN(0, height / scale));
-    result.angle = randMToN(0.0, 2 * M_PI);
+    do {
+        result.position = Point(randMToN(0, realWidth), randMToN(0, realHeight));
+        result.angle = randMToN(0.0, 2 * M_PI);
+    } while (canRobotAt(result.position));
     return result;
+}
+
+Point Map::getCenterCell(const Cell &cell) {
+    return cell2point(cell.first, cell.second);
+}
+
+Cell Map::point2cell(const Point &point) {
+    return Cell(X(point), Y(point));
+}
+
+bool Map::canRobotAt(const Point &point) {
+    return canRobotAt(X(point), Y(point));
 }

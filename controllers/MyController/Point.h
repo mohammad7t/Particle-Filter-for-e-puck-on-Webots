@@ -10,4 +10,6 @@
 
 typedef complex<double> Point;
 
+Point unitAngle(double angle);
+
 #endif //MYCONTROLLER_POINT_H
