@@ -32,7 +32,7 @@ void SensorModel::readSensorModelFile() {
                 index += 1;
             }
             double x = atof(temp.c_str());
-            cout << x << endl;
+            // cout << x << endl;
             meanSensorVector[i].push_back(x);
             temp = "";
 

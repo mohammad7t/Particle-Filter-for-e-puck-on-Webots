@@ -21,4 +21,8 @@ const double ROBOT_RADIUS = 3.7;
 #define X(point) ((point).real())
 #define Y(point) ((point).imag())
 
+double randZeroToOne();
+
+double randMToN(double M, double N);
+
 #endif // COMMON_H_INCLUDED

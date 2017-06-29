@@ -18,8 +18,11 @@ public:
 
     ParticleFilter(const vector<Particle> &particleSet, Map *map, SensorModel *sensorModel1);
 
+    ParticleFilter(unsigned int particleSize, Map *map1, SensorModel *sensorModel1);
+
     void updateWeights(Observation &observation) {
-        for (auto &particle : particleSet) {
+        for (int i = 0; i < particleSet.size(); i++) {
+            Particle &particle = particleSet[i];
             particle.weight = sensorModel->getObservationProbability(&particle, &observation, map);
         }
     }

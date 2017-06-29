@@ -6,10 +6,15 @@
 #define MYCONTROLLER_VISUALIZER_H
 
 #include "MainController.h"
+#include "ParticleFilter.h"
 
 class Visualizer {
 public:
     MainController *controller;
+    ParticleFilter *particleFilter;
+    bool doDisplay;
+    Map *map;
+    int cellSize;
 
     void runController(MainController *controller);
 
@@ -19,7 +24,11 @@ public:
 
     void idle();
 
+    void visualize(ParticleFilter *particleFilter);
+
     virtual ~Visualizer();
+
+    void runWithoutController();
 };
 
 

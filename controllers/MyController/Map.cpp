@@ -1,6 +1,5 @@
 #include "Map.h"
 
-
 Map::Map(void) {
     readEnviroment();
     readMapFile();
@@ -96,7 +95,7 @@ double Map::distanceToNearestObstacle(Point pos, double angle) {
 
     int i = 0;
     while (true) {
-        cout << "distanceToNearestObstacle: nextX=" << nextX << "\tnextY=" << nextY << endl;
+        // cout << "distanceToNearestObstacle: nextX=" << nextX << "\tnextY=" << nextY << endl;
         nextX = nextX + cos(angle) * step;
         nextY = nextY - sin(angle) * step;
 
@@ -115,12 +114,7 @@ Map::~Map(void) {
 }
 
 void Map::assignCanBeAt() {
-
-    for (int l = 0; l < height; ++l) {
-        for (int i = 0; i < width; ++i) {
-            canBeAt[l][i] = true;
-        }
-    }
+    canBeAt = vector<vector<bool>>(height, vector<bool>(width, true));
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -138,7 +132,7 @@ void Map::assignCanBeAt() {
 Cell Map::getCell(double x, double y) {
     int cellX = (int) (x / (1 / scale));
     int cellY = (int) (y / (1 / scale));
-    return Cell(cellX, cellY);
+    return Cell(cellY, cellX);
 
 }
 
@@ -153,5 +147,9 @@ bool Map::canRobotAt(double x, double y) {
     return canBeAt[centerCell.second][centerCell.first];
 }
 
-
-
+Particle Map::generateRandomParticle() {
+    Particle result;
+    result.position = Point(randMToN(0, width / scale), randMToN(0, height / scale));
+    result.angle = randMToN(0.0, 2 * M_PI);
+    return result;
+}

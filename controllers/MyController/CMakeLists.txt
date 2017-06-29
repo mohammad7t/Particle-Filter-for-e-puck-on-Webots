@@ -14,7 +14,7 @@ link_directories("C:/Program Files (x86)/Webots/lib")
 add_definitions(-DWIN32 -mwindows)
 
 set(SOURCE_FILES
-        common.h
+        common.h common.cpp
         MainController.cpp MainController.h
         Odometry.cpp Odometry.h
         Visualizer.cpp Visualizer.h

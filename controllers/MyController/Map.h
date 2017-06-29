@@ -11,7 +11,6 @@
 #include "Observation.h"
 #include <set>
 #include "Cell.h"
-#include ""
 
 #define RADIUS_ROBOT 3.7 //cm
 
@@ -47,7 +46,7 @@ public:
 
     void assignCanBeAt();
 
-
+    Particle generateRandomParticle();
     bool canRobotAt(double d, double d1);
 };
 
