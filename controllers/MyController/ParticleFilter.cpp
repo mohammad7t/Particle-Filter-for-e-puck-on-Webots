@@ -73,7 +73,7 @@ void ParticleFilter::reSampling() {
 }
 
 int ParticleFilter::compare(double d1, double d2) {
-    if (abs(d1 - d2) < pow(10, -9.0)) {
+    if (abs(d1 - d2) < 1e-9) {
         return 0;
     } else if (d1 - d2 < 0) {
         return -1;

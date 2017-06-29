@@ -29,6 +29,10 @@ public:
     virtual ~Visualizer();
 
     void runWithoutController();
+
+    Point convert(const Point &p);
+
+    void vertexPoint(const Point &p);
 };
 
 

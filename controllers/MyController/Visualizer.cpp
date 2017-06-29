@@ -16,7 +16,7 @@ void _display() {
 }
 
 void _idle() {
-    cout << "idle" << endl;
+    // cout << "idle" << endl;
     if (_singleton) {
         _singleton->idle();
     }
@@ -36,22 +36,37 @@ Visualizer::Visualizer(int argc, char **argv) {
 
 void Visualizer::display() {
     if (!doDisplay) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
         glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
         glFlush();  // Render now
+        glutSwapBuffers();
         return;
     }
-    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-    glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
-    // Draw a Red 1x1 Square centered at origin
-    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
-    glColor3f(1.0f, 0.0f, 0.0f); // Red
-    glVertex2f(-0.5f, -0.5f);    // x, y
-    glVertex2f(0.5f, -0.5f);
-    glVertex2f(0.7f, 0.5f);
-    glVertex2f(-0.5f, 0.5f);
-    glEnd();
 
+    //glClearColor(1.0f,1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
+
+    for (int i = 0; i < map->height; i++) {
+        for (int j = 0; j < map->width; j++) {
+            glBegin(GL_QUADS);
+            if (map->mapVector[i][j]) {
+                glColor3f(1.0f, 0.0f, 0.0f); // Red
+            } else {
+                glColor3f(1.0f, 1.0f, 1.0f); // white
+            }
+
+            Point base = map->unit * Point(map->width - 1 - j, i);
+            vertexPoint(base + Point(0, 0));
+            vertexPoint(base + Point(0, map->unit));
+            vertexPoint(base + Point(map->unit, map->unit));
+            vertexPoint(base + Point(map->unit, 0));
+            glEnd();
+            //break;
+        }
+        //break;
+    }
     glFlush();  // Render now
+    glutSwapBuffers();
 }
 
 Visualizer::~Visualizer() {
@@ -74,11 +89,25 @@ void Visualizer::visualize(ParticleFilter *particleFilter) {
     this->map = particleFilter->map;
 
     cellSize = 5;
-    glutReshapeWindow(map->width * cellSize, map->height * cellSize);
-
+    glutReshapeWindow((int) (map->width * map->unit * cellSize), (int) (map->height * map->unit * cellSize));
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    //gluOrtho2D(0, map->width, 0, map->height);
     doDisplay = true; // start displaying
 }
 
 void Visualizer::runWithoutController() {
     runController(NULL);
+}
+
+Point Visualizer::convert(const Point &p) {
+    //return p;
+    return Point(2 * X(p) / map->realWidth - 1, 2 * Y(p) / map->realHeight - 1);
+}
+
+void Visualizer::vertexPoint(const Point &p) {
+    // cout << p << endl;
+    Point converted = convert(p);
+    // cout << '!' << converted << endl;
+    glVertex2d(X(converted), Y(converted));
 }

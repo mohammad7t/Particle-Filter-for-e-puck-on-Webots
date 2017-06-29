@@ -20,6 +20,9 @@ public:
     int width;
     int height;
     double scale;
+    double unit;
+    double realWidth;
+    double realHeight;
     bool **mapArray;
 
     vector<vector<bool> > mapVector;

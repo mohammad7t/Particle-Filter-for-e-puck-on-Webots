@@ -12,7 +12,9 @@ void Map::readEnviroment() {
 
     if (myFile.is_open()) {
         myFile >> height >> width >> scale;
-
+        unit = 1 / scale;
+        realWidth = unit * width;
+        realHeight = unit * height;
         myFile.close();
     }
 }
