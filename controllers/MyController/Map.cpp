@@ -3,7 +3,10 @@
 Map::Map(const char *envFileName, const char *mapFileName) {
     readEnviroment(envFileName);
     readMapFile(mapFileName);
-    assignCanBeAt();
+    if (!readCanBeAtFromFile()) {
+        assignCanBeAt();
+        writeCanBeAtInFile();
+    }
 }
 
 void Map::readEnviroment(const char *envFileName) {
@@ -156,4 +159,73 @@ bool Map::canRobotBeAt(const Point &point) {
 
 Point Map::getCenterCell(int row, int col) {
     return getCenterCell(Cell(row, col));
+}
+
+bool Map::readCanBeAtFromFile() {
+    ifstream canBeFile;
+    canBeFile.open("canBeHere.txt");
+    cout << "reading canBeHere ...." << endl;
+
+    if (canBeFile.is_open()) {
+
+
+        vector<bool> tempVector;
+        for (int i = 0; i < height; i++) {
+            string line;
+            getline(canBeFile, line);
+            tempVector.clear();
+            canBeAt.push_back(tempVector);
+            int index = 0;
+            int j = 0;
+            int lineLength = line.length();
+            while (index < lineLength) {
+                //cout<<"index= "<<index<<endl;
+                if (line.at(index) == ' ') {
+                    index += 1;
+                    continue;
+                } else if (line.at(index) == '\n') {
+                    break;
+                } else if (line.at(index) == '1') {
+                    canBeAt[i].push_back(true);
+                    j += 1;
+                } else if (line.at(index) == '0') {
+                    canBeAt[i].push_back(false);
+                    j += 1;
+                }
+                index += 1;
+
+            }
+
+        }
+        canBeFile.close();
+        return true;
+
+    }
+    cout << "read canBeHere finished" << endl;
+    return false;
+
+}
+
+void Map::writeCanBeAtInFile() {
+    ofstream canBeFile;
+    canBeFile.open("canBeHere.txt");
+    cout << "reading canBeHere ...." << endl;
+
+    if (canBeFile.is_open()) {
+        for (int i = 0; i < canBeAt.size(); ++i) {
+            for (int j = 0; j < canBeAt[i].size(); ++j) {
+                if (canBeAt[i][j]) {
+                    canBeFile << '1';
+                } else {
+                    canBeFile << '0';
+                }
+                if (j != canBeAt[i].size() - 1) {
+                    canBeFile << ' ';
+                }
+            }
+            canBeFile << endl;
+        }
+        canBeFile.close();
+    }
+
 }
