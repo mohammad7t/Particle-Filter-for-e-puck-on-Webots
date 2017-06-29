@@ -17,6 +17,6 @@ public:
 
     double weight;
 
-    void doAction(Action action,Map *world);
+    void doAction(Action *action, Map *world);
 };
 

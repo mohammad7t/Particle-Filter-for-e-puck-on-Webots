@@ -19,3 +19,65 @@ ParticleFilter::ParticleFilter(uint particleSize, Map *map, SensorModel *sensorM
     }
 }
 
+void ParticleFilter::updateWeights(Observation &observation) {
+    for (auto &particle : particleSet) {
+        particle.weight = sensorModel->getObservationProbability(&particle, &observation, map);
+    }
+}
+
+void ParticleFilter::updateParticleSetWithAction(Action *action) {
+    for (int i = 0; i < particleSet.size(); ++i) {
+        particleSet[i].doAction(action, map);
+    }
+}
+
+void ParticleFilter::reSampling() {
+    double sumWeight = 0;
+    vector<double> weightsDivider;
+    weightsDivider.push_back(0.0);
+    for (int i = 0; i < particleSet.size(); ++i) {
+        sumWeight += particleSet[i].weight;
+        weightsDivider.push_back(sumWeight);
+    }
+    double accumulative = sumWeight;
+    for (int i = 0; i < particleSet.size(); ++i) {
+        accumulative += particleSet[i].weight;
+        weightsDivider.push_back(accumulative);
+    }
+    //generate random double
+    uniform_real_distribution<double> distribution(0, sumWeight);
+    mt19937 rng;
+    rng.seed(std::random_device{}());
+    double randomNumber = distribution(rng);
+
+
+    double step = sumWeight / particleSet.size();
+
+    int selectedIndex = 0;
+    vector<Particle> newParticleSet;
+
+    for (int j = 0; j < particleSet.size(); ++j) {
+        for (int i = selectedIndex; i < weightsDivider.size(); ++i) {
+            if (compare(randomNumber, weightsDivider[i + 1]) == -1) {
+                selectedIndex = i;
+                newParticleSet.push_back(particleSet[selectedIndex % particleSet.size()]);
+                break;
+            }
+        }
+        randomNumber = randomNumber + step;
+    }
+    particleSet = newParticleSet;
+
+
+}
+
+int ParticleFilter::compare(double d1, double d2) {
+    if (abs(d1 - d2) < pow(10, -9.0)) {
+        return 0;
+    } else if (d1 - d2 < 0) {
+        return -1;
+    } else {
+        return +1;
+    }
+}
+

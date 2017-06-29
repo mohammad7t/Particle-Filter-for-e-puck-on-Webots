@@ -7,7 +7,7 @@
 
 class Action{
 public:
-    bool isRotate;
-    double amount;
+    double rotateRadian;
+    double distance;
 };
 #endif //MYCONTROLLER_ACTION_H
