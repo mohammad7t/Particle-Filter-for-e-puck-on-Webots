@@ -103,7 +103,7 @@ void Map::assignCanBeAt() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < obstacles.size(); k++) {
-                if (abs(cell2point(i, j) - getCenterCell(obstacles[k])) > RADIUS_ROBOT) {
+                if (abs(cell2point(i, j) - getCenterCell(obstacles[k])) < RADIUS_ROBOT) {
                     canBeAt[i][j] = false;
                     break;
                 }
@@ -124,9 +124,8 @@ Point Map::cell2point(int row, int col) {
 }
 
 
-bool Map::canRobotAt(double x, double y) {
+bool Map::canRobotBeAt(double x, double y) {
     Cell centerCell = point2cell(x, y);
-
     return canBeAt[centerCell.first][centerCell.second];
 }
 
@@ -135,7 +134,7 @@ Particle Map::generateRandomParticle() {
     do {
         result.position = Point(randMToN(0, realWidth), randMToN(0, realHeight));
         result.angle = randMToN(0.0, 2 * M_PI);
-    } while (canRobotAt(result.position));
+    } while (!canRobotBeAt(result.position));
     return result;
 }
 
@@ -147,6 +146,10 @@ Cell Map::point2cell(const Point &point) {
     return Cell(X(point), Y(point));
 }
 
-bool Map::canRobotAt(const Point &point) {
-    return canRobotAt(X(point), Y(point));
+bool Map::canRobotBeAt(const Point &point) {
+    return canRobotBeAt(X(point), Y(point));
+}
+
+Point Map::getCenterCell(int row, int col) {
+    return getCenterCell(Cell(row, col));
 }

@@ -47,15 +47,18 @@ void Visualizer::display() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glColor3f(1.0f, 0.0f, 0.0f); // Red
     for (int i = 0; i < map->obstacles.size(); i++) {
-        int row = map->obstacles[i].second, col = map->obstacles[i].first;
-        glBegin(GL_QUADS);
-        Point base = map->unit * Point(col, map->height - 1 - row);
-        vertexPoint(base + Point(0, 0));
-        vertexPoint(base + Point(0, map->unit));
-        vertexPoint(base + Point(map->unit, map->unit));
-        vertexPoint(base + Point(map->unit, 0));
-        glEnd();
+        drawCell(map->obstacles[i].first, map->obstacles[i].second);
     }
+
+    /*
+    for (int i=0; i<map->height; i++){
+        for (int j = 0; j < map->width; ++j) {
+            if (!map->canRobotBeAt(map->getCenterCell(i, j))){
+                drawCell(i, j);
+            }
+        }
+    }
+     */
 
     cout << particleFilter->particleSet.size() << endl;
     for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
@@ -63,7 +66,6 @@ void Visualizer::display() {
         glBegin(GL_TRIANGLES);
         glColor3f(0, 0, 1.0f); // Blue
         Point base = particle.position;
-        cout << base << endl;
         double angle = particle.angle;
         const double a = map->unit * 2;
         const double b = 3 * a;
@@ -76,6 +78,16 @@ void Visualizer::display() {
 
     glFlush();  // Render now
     glutSwapBuffers();
+}
+
+void Visualizer::drawCell(int row, int col) {
+    Point base = map->unit * Point(col, map->height - 1 - row);
+    glBegin(GL_QUADS);
+    vertexPoint(base + Point(0, 0));
+    vertexPoint(base + Point(0, map->unit));
+    vertexPoint(base + Point(map->unit, map->unit));
+    vertexPoint(base + Point(map->unit, 0));
+    glEnd();
 }
 
 Visualizer::~Visualizer() {

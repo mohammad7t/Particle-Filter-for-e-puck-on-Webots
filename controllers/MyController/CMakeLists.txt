@@ -21,6 +21,7 @@ set(SOURCE_FILES
         Particle.cpp Particle.h
         SensorModel.cpp SensorModel.h
         Observation.cpp Observation.h
+        Cell.cpp Cell.h
         Point.cpp Point.h
         Map.cpp Map.h
         Gaussian.cpp Gaussian.h

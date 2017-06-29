@@ -33,6 +33,8 @@ public:
     Point convert(const Point &p);
 
     void vertexPoint(const Point &p);
+
+    void drawCell(int row, int col);
 };
 
 

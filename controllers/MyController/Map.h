@@ -48,8 +48,11 @@ public:
     void assignCanBeAt();
 
     Particle generateRandomParticle();
-    bool canRobotAt(double d, double d1);
 
-    bool canRobotAt(const Point &point);
+    bool canRobotBeAt(double d, double d1);
+
+    bool canRobotBeAt(const Point &point);
+
+    Point getCenterCell(int row, int col);
 };
 

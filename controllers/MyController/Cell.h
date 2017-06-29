@@ -9,5 +9,6 @@
 
 typedef pair<int, int> Cell;
 
+std::ostream &operator<<(std::ostream &out, const Cell &rhs);
 
 #endif //MYCONTROLLER_CELL_H

@@ -22,7 +22,7 @@ void Particle::doAction(Action *action, Map *world) {
             nextY > world->realHeight) {
             break;
         }
-        if (world->canRobotAt(nextX, nextY)) {
+        if (world->canRobotBeAt(nextX, nextY)) {
             break;
         }
         position = Point(nextX, nextY);
