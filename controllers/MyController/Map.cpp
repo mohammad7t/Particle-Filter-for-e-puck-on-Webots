@@ -4,6 +4,7 @@
 Map::Map(void) {
     readEnviroment();
     readMapFile();
+    assignCanBeAt();
 }
 
 void Map::readEnviroment() {
@@ -79,7 +80,7 @@ void Map::readMapFile() {
 bool Map::isObstacle(double x, double y) {
     int cellX = (int) (x / (1 / scale));
     int cellY = (int) (y / (1 / scale));
-    cout<< "isObstacle: cell=["<<cellX<<","<<cellY<<"]"<<endl;
+    cout << "isObstacle: cell=[" << cellX << "," << cellY << "]" << endl;
     for (int i = 0; i < obstacles.size(); i++) {
         if (obstacles[i].first == cellX && obstacles[i].second == cellY)
             return true;
@@ -95,7 +96,7 @@ double Map::distanceToNearestObstacle(Point pos, double angle) {
 
     int i = 0;
     while (true) {
-        cout<<"distanceToNearestObstacle: nextX="<<nextX<<"\tnextY="<<nextY<<endl;
+        cout << "distanceToNearestObstacle: nextX=" << nextX << "\tnextY=" << nextY << endl;
         nextX = nextX + cos(angle) * step;
         nextY = nextY - sin(angle) * step;
 
@@ -114,12 +115,43 @@ Map::~Map(void) {
 }
 
 void Map::assignCanBeAt() {
-    for(int i=0;i < height;i++){
-        for(int j=0;j<width;j++){
 
+    for (int l = 0; l < height; ++l) {
+        for (int i = 0; i < width; ++i) {
+            canBeAt[l][i] = true;
+        }
+    }
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            for (int k = 0; k < obstacles.size(); k++) {
+                if (abs(Point(i, j) - Point(obstacles[k].first, obstacles[k].second)) > RADIUS_ROBOT) {
+                    canBeAt[i][j] = false;
+                    break;
+                }
+            }
         }
     }
 
 }
+
+Cell Map::getCell(double x, double y) {
+    int cellX = (int) (x / (1 / scale));
+    int cellY = (int) (y / (1 / scale));
+    return Cell(cellX, cellY);
+
+}
+
+Point Map::getCenterCell(int x, int y) {
+
+    return Point(x * 1 / scale + 1 / scale / 2);
+}
+
+bool Map::canRobotAt(double x, double y) {
+    Cell centerCell = getCell(x, y);
+
+    return canBeAt[centerCell.second][centerCell.first];
+}
+
 
 
