@@ -1,14 +1,14 @@
 #include "Map.h"
 
-Map::Map(void) {
-    readEnviroment();
-    readMapFile();
+Map::Map(const char *envFileName, const char *mapFileName) {
+    readEnviroment(envFileName);
+    readMapFile(mapFileName);
     assignCanBeAt();
 }
 
-void Map::readEnviroment() {
+void Map::readEnviroment(const char *envFileName) {
     ifstream myFile;
-    myFile.open("env.txt");
+    myFile.open(envFileName);
 
     if (myFile.is_open()) {
         myFile >> height >> width >> scale;
@@ -19,9 +19,9 @@ void Map::readEnviroment() {
     }
 }
 
-void Map::readMapFile() {
+void Map::readMapFile(const char *mapFileName) {
     ifstream mapFile;
-    mapFile.open("map.txt");
+    mapFile.open(mapFileName);
     cout << "reading map ...." << endl;
 
     if (mapFile.is_open()) {

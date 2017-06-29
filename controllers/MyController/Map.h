@@ -25,7 +25,7 @@ public:
     vector<pair<int, int> > obstacles;
     vector<vector<bool> > canBeAt;
 
-    Map(void);
+    Map(const char *envFileName, const char *mapFileName);
 
     ~Map(void);
 
@@ -40,9 +40,9 @@ public:
                     double y); //parameter : real position x and y then compute cell that contain this position then return is it obstacle or not
     double distanceToNearestObstacle(Point pos, double angle);
 
-    void readEnviroment();
+    void readEnviroment(const char *envFileName);
 
-    void readMapFile();
+    void readMapFile(const char *mapFileName);
 
 
     void assignCanBeAt();
