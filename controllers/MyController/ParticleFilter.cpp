@@ -40,6 +40,9 @@ void ParticleFilter::reSampling() {
         sumWeight += particleSet[i].weight;
         weightsDivider.push_back(sumWeight);
     }
+    cout
+            << "sumWeight ====================================================================================================="
+            << sumWeight << endl;
     double accumulative = sumWeight;
     for (int i = 0; i < particleSet.size(); ++i) {
         accumulative += particleSet[i].weight;

@@ -3,7 +3,7 @@
 int main(int argc, char **argv) {
     Map map("env.txt", "map.txt");
     SensorModel sensorModel;
-    ParticleFilter particleFilter(100, &map, &sensorModel);
+    ParticleFilter particleFilter(1000, &map, &sensorModel);
     MainController mainController(&particleFilter);
 
     Visualizer visualizer(argc, argv);

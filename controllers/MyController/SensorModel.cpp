@@ -100,21 +100,28 @@ SensorModel::~SensorModel(void) {
 }
 
 Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
+    cout << "line koooft " << endl;
     Observation result(SENSORS, 0.0);
     for (int i = 0; i < SENSORS; i++) {
+        cout << "line koooft " << i << endl;
         result[i] = convertSingleSensorValue(i, sensorValues[i]);
+        cout << "line koooft ! " << i << endl;
     }
+    cout << "line koooft finish" << endl;
     return result;
 }
 
 double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
     vector<Gaussian> &gaussians = distanceSensors[sensorId];
     int slopeBegin = 0;
+
     for (; slopeBegin < DISTANCES - 1; slopeBegin++) {
+//        cout<<"in for loop " <<endl;
         if (gaussians[slopeBegin + 1].mean <= sensorValue) {
             break;
         }
     }
+//    cout<<"out for loop"<<endl;
     return fabs(sensorValue - gaussians[slopeBegin].mean) * (slopeBegin + 1) +
            fabs(sensorValue - gaussians[slopeBegin + 1].mean) * slopeBegin;
 }
@@ -139,8 +146,8 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
         cout << "=======================" << endl;
         cout << distance << endl;
     }
-    cout << "gausian s" << sensorId << " , " << distance << " = N(" << gaussian.mean << "," << gaussian.sigma2 << ")"
-         << endl;
+//    cout << "gausian s" << sensorId << " , " << distance << " = N(" << gaussian.mean << "," << gaussian.sigma2 << ")"
+//         << endl;
     return gaussian;
 }
 
@@ -178,11 +185,11 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
 }
 
 void SensorModel::computeDistanceSensors() {
-    distanceSensors = vector<vector<Gaussian>>(7, vector<Gaussian>(8, Gaussian(0, 0)));
+    distanceSensors = vector<vector<Gaussian>>(8, vector<Gaussian>(7, Gaussian(0, 0)));
     for (int i = 0; i < SENSORS; i++) {
         for (int j = 0; j < 7; j++) {
-            distanceSensors[j][i].mean = meanSensorVector[i][j];
-            distanceSensors[j][i].sigma2 = pow(stdDeviationSensorVector[i][j], 2);
+            distanceSensors[i][j].mean = meanSensorVector[i][j];
+            distanceSensors[i][j].sigma2 = stdDeviationSensorVector[i][j];
         }
     }
 }

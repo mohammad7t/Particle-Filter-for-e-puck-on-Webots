@@ -35,6 +35,7 @@ void MainController::readSensorValues() {
 }
 
 int MainController::nextStep() {
+    cout << "************************************** " << stepNumber << endl;
     stepNumber++;
     readSensorValues();
 //    for (int i = 0; i < SENSORS; i++) {
@@ -44,10 +45,15 @@ int MainController::nextStep() {
     if (stepNumber % 10 == 0) {
 
         Action action = odometry.getAction();
+        cout << "line 1" << endl;
         particleFilter->updateParticleSetWithAction(&action);
+        cout << "line 2" << endl;
         Observation observation = getObservation();
+        cout << "line 3" << endl;
         particleFilter->updateWeights(observation);
+        cout << "line 4" << endl;
         particleFilter->reSampling();
+        cout << "line 5" << endl;
         speed[0] = 100;
         speed[1] = 100;
     }
@@ -78,10 +84,6 @@ void MainController::run() {
 }
 
 Observation MainController::getObservation() {
-    Observation observation;
-    observation.assign(8, 0);
-    for (int i = 0; i < 8; ++i) {
-        observation[i] = sensor[i]->getValue();
-    }
-    return observation;
+
+    return particleFilter->sensorModel->sensorValuesToObservation(sensorValue);
 }
