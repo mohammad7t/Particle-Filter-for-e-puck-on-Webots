@@ -7,6 +7,7 @@
 
 class Action{
 public:
+
     double rotateRadian;
     double distance;
 };
