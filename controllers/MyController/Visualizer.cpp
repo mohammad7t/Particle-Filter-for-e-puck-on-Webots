@@ -51,7 +51,7 @@ void Visualizer::display() {
     for (int i = 0; i < map->obstacles.size(); i++) {
         drawCell(map->obstacles[i].first, map->obstacles[i].second);
     }
-     /**/
+    /**/
 
     /**
     for (int i = 0; i < map->height; i++) {
@@ -75,8 +75,8 @@ void Visualizer::display() {
         glColor3d(c, c, c); // Blue
         Point base = particle.position;
         double angle = particle.angle;
-        const double a = map->unit * 2 / 1.5;
-        const double b = 4 * a;
+        const double a = map->unit * RADIUS_ROBOT / 4;
+        const double b = map->unit * RADIUS_ROBOT;
         Point rotator = unitAngle(angle - M_PI_2);
         vertexPoint(Point(a, 0) * rotator + base);
         vertexPoint(Point(0, b) * rotator + base);
@@ -120,7 +120,7 @@ void Visualizer::visualize(ParticleFilter *particleFilter) {
     this->particleFilter = particleFilter;
     this->map = particleFilter->map;
 
-    cellSize = 5;
+    cellSize = (int) (700 / max(map->realWidth, map->realHeight));
     glutReshapeWindow((int) (map->width * map->unit * cellSize), (int) (map->height * map->unit * cellSize));
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
