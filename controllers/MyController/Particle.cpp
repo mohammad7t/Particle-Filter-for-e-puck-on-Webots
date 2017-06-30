@@ -37,3 +37,8 @@ void Particle::doAction(Action *action, Map *world) {
 Particle::Particle(void) {
 
 }
+
+ostream &operator<<(ostream &out, const Particle &particle) {
+    out << particle.weight;
+    return out;
+}

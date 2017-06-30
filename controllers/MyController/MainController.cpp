@@ -31,7 +31,6 @@ void MainController::readSensorValues() {
     accValue = accelerometer->getValues();
 
     odometry.update();
-    cout << odometry.d << ' ' << odometry.a << endl;
 }
 
 int MainController::nextStep() {
@@ -43,10 +42,10 @@ int MainController::nextStep() {
     }
     cout << endl;
 
-    if (stepNumber % 10 == 0) {
+    if (stepNumber % 100 == 0) {
 
         Action action = odometry.getAction();
-        cout << "line 1" << endl;
+        cout << "line 1" << SHOW(action) << endl;
         particleFilter->updateParticleSetWithAction(&action);
         cout << "line 2" << endl;
         Observation observation = getObservation();

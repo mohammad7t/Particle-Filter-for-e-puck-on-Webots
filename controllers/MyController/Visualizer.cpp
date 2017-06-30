@@ -24,6 +24,7 @@ void _idle() {
 }
 
 Visualizer::Visualizer(int argc, char **argv) {
+    lastVersion = -1;
     glutInit(&argc, argv);                 // Initialize GLUT
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutCreateWindow("OpenGL Setup Test"); // Create a window with the given title
@@ -38,21 +39,21 @@ void Visualizer::display() {
     glClear(GL_COLOR_BUFFER_BIT);         // Clear the color buffer
 
     if (!doDisplay) {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+        glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // Set background color to green
         glutSwapBuffers();
         return;
     }
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glColor3f(1.0f, 0.0f, 0.0f); // Red
 
-    /**
+    /**/
     for (int i = 0; i < map->obstacles.size(); i++) {
         drawCell(map->obstacles[i].first, map->obstacles[i].second);
     }
      /**/
 
-    /**/
+    /**
     for (int i = 0; i < map->height; i++) {
         for (int j = 0; j < map->width; ++j) {
             if (!map->canRobotBeAt(map->getCenterCell(i, j))) {
@@ -62,15 +63,20 @@ void Visualizer::display() {
     }
     /**/
 
-    cout << particleFilter->particleSet.size() << endl;
+    double maxWeight = -1;
+    for (int i = 0; i < particleFilter->particleSet.size(); i++) {
+        maxWeight = max(maxWeight, particleFilter->particleSet[i].weight);
+    }
+
     for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
         Particle &particle = particleFilter->particleSet[i];
         glBegin(GL_TRIANGLES);
-        glColor3f(0, 0, 1.0f); // Blue
+        double c = particle.weight / maxWeight;
+        glColor3d(c, c, c); // Blue
         Point base = particle.position;
         double angle = particle.angle;
-        const double a = map->unit * 2 / 3;
-        const double b = 3 * a;
+        const double a = map->unit * 2 / 1.5;
+        const double b = 4 * a;
         Point rotator = unitAngle(angle - M_PI_2);
         vertexPoint(Point(a, 0) * rotator + base);
         vertexPoint(Point(0, b) * rotator + base);
@@ -102,7 +108,10 @@ void Visualizer::runController(IController *controller) {
 
 void Visualizer::idle() {
     if (this->controller) {
-        glutPostRedisplay();
+        if (lastVersion != particleFilter->version) {
+            lastVersion = particleFilter->version;
+            glutPostRedisplay();
+        }
         this->controller->nextStep();
     }
 }

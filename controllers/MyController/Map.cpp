@@ -75,7 +75,7 @@ bool Map::isObstacle(double x, double y) {
 }
 
 double Map::distanceToNearestObstacle(Point pos, double angle) {
-    double step = 0.1;
+    double step = 0.3;
     double nextX, nextY;
     nextX = pos.real();
     nextY = pos.imag();

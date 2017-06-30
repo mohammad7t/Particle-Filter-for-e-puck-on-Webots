@@ -7,12 +7,13 @@
 typedef unsigned int uint;
 
 ParticleFilter::ParticleFilter(const vector<Particle> &particleSet, Map *map, SensorModel *sensorModel) : particleSet(
-        particleSet), map(map), sensorModel(sensorModel) {
+        particleSet), map(map), sensorModel(sensorModel), version(0) {
     this->map = map;
 }
 
 ParticleFilter::ParticleFilter(uint particleSize, Map *map, SensorModel *sensorModel) : map(map),
-                                                                                        sensorModel(sensorModel) {
+                                                                                        sensorModel(sensorModel),
+                                                                                        version(0) {
     particleSet.reserve(particleSize);
     for (uint i = 0; i < particleSize; i++) {
         particleSet.push_back(map->generateRandomParticle());
@@ -27,12 +28,14 @@ void ParticleFilter::updateWeights(Observation &observation) {
 }
 
 void ParticleFilter::updateParticleSetWithAction(Action *action) {
+    tickVersion();
     for (int i = 0; i < particleSet.size(); ++i) {
         particleSet[i].doAction(action, map);
     }
 }
 
 void ParticleFilter::reSampling() {
+    tickVersion();
     double sumWeight = 0;
     vector<double> weightsDivider;
     weightsDivider.push_back(0.0);
@@ -80,5 +83,9 @@ int ParticleFilter::compare(double d1, double d2) {
     } else {
         return +1;
     }
+}
+
+void ParticleFilter::tickVersion() {
+    version++;
 }
 

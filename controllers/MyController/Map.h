@@ -59,6 +59,5 @@ public:
 
     Point getCenterCell(int row, int col);
 
-    void trim(int width, int height);
 };
 

@@ -112,8 +112,13 @@ double interpolate(double x1, double y1, double x2, double y2, double xQuery) {
     return (xQuery - x1) / dx * y2 + (x2 - xQuery) / dx * y1;
 }
 
+inline double regularize(double distance) {
+    return min(8.0, max(0.0, distance));
+}
+
 double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
     vector<double> &means = meanSensorVector[sensorId];
+
     int slopeBegin = 0;
 
     for (; slopeBegin < DISTANCES - 2; slopeBegin++) {
@@ -122,9 +127,10 @@ double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
         }
     }
 
-    return interpolate(means[slopeBegin], slopeBegin + 1,
-                       means[slopeBegin + 1], slopeBegin + 2,
-                       sensorValue);
+    double result = interpolate(means[slopeBegin], slopeBegin + 1,
+                                means[slopeBegin + 1], slopeBegin + 2,
+                                sensorValue);
+    return regularize(result);
 }
 
 Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
@@ -152,33 +158,21 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
 }
 
 double SensorModel::getObservationProbability(Particle *particle, Observation *observation, Map *world) {
-    double distanceSensor1 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S0_ORIENTATION);
-    double distanceSensor2 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S1_ORIENTATION);
-//    cout << "robot distance [" << X(particle->position) << "," << Y(particle->position) << ","
-//         << particle->angle - M_PI / 2 + S1_ORIENTATION << "] =" << distanceSensor2;
-    double distanceSensor3 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S2_ORIENTATION);
-    double distanceSensor4 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S3_ORIENTATION);
-    double distanceSensor5 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S4_ORIENTATION);
-    double distanceSensor6 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S5_ORIENTATION);
-    double distanceSensor7 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S6_ORIENTATION);
-    double distanceSensor8 = world->distanceToNearestObstacle(particle->position,
-                                                              particle->angle - M_PI / 2 + S7_ORIENTATION);
-
-    double prob = getSensorGaussian(0, distanceSensor1).getProbability(observation[0][0]) *
-                  getSensorGaussian(1, distanceSensor2).getProbability(observation[0][1]) *
-                  getSensorGaussian(2, distanceSensor3).getProbability(observation[0][2]) *
-                  getSensorGaussian(3, distanceSensor4).getProbability(observation[0][3]) *
-                  getSensorGaussian(4, distanceSensor5).getProbability(observation[0][4]) *
-                  getSensorGaussian(5, distanceSensor6).getProbability(observation[0][5]) *
-                  getSensorGaussian(6, distanceSensor7).getProbability(observation[0][6]) *
-                  getSensorGaussian(7, distanceSensor8).getProbability(observation[0][7]);
-
+    Observation expectedObservation = getExpectedObservation(particle, world);
+    double prob = 1;
+    for (int i = 0; i < SENSORS; i++) {
+        prob *= getSensorGaussian(i, expectedObservation[i]).getProbability(observation->at(i));
+    }
     return prob;
+}
+
+Observation SensorModel::getExpectedObservation(const Particle *particle, Map *world) const {
+    Observation expectedObservation;
+    for (int i = 0; i < SENSORS; i++) {
+        double distance = world->distanceToNearestObstacle(particle->position,
+                                                           particle->angle - M_PI_2 + SENSOR_ORIENTATION[i]);
+        distance -= RADIUS_ROBOT;
+        expectedObservation.push_back(regularize(distance));
+    }
+    return expectedObservation;
 }

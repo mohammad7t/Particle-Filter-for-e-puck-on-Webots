@@ -21,6 +21,7 @@ public:
     bool doDisplay;
     Map *map;
     int cellSize;
+    int lastVersion;
 
     void runController(IController *controller);
 

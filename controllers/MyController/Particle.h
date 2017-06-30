@@ -20,3 +20,5 @@ public:
     void doAction(Action *action, Map *world);
 };
 
+ostream &operator<<(ostream &out, const Particle &particle);
+

@@ -8,15 +8,7 @@
 #include "Observation.h"
 #include "Gaussian.h"
 
-// SENSOR ORIENTATION RADIAN
-#define S0_ORIENTATION 1.27
-#define S1_ORIENTATION 0.77
-#define S2_ORIENTATION 0.0
-#define S3_ORIENTATION 5.21
-#define S4_ORIENTATION 4.21
-#define S5_ORIENTATION 3.14159
-#define S6_ORIENTATION 2.37
-#define S7_ORIENTATION 1.87
+const double SENSOR_ORIENTATION[] = {1.27, .77, 0.0, 5.21, 4.21, 3.14159, 2.37, 1.87};
 
 
 class SensorModel {
@@ -35,5 +27,7 @@ public:
     Observation sensorValuesToObservation(double *sensorValues);
 
     double getObservationProbability(Particle *particle, Observation *observation,Map *world);
+
+    Observation getExpectedObservation(const Particle *particle, Map *world) const;
 };
 

@@ -10,9 +10,11 @@
 #include "Particle.h"
 #include "Map.h"
 #include "SensorModel.h"
+#include "Action.h"
 
 class ParticleFilter {
 public:
+    int version;
     vector<Particle> particleSet;
     Map *map;
     SensorModel *sensorModel;
@@ -26,6 +28,7 @@ public:
 
     void reSampling();
 
+    void tickVersion();
 
     // if d1 - d2 < 10e-9 : return 0;
     // else if d1 - d2 < 0  : return -1;

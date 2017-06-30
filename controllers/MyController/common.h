@@ -19,6 +19,8 @@ const int SENSORS = 8; //
 const int DISTANCES = 7;
 const double RADIUS_ROBOT = 3.7;
 
+#define SHOW(x) #x << '=' << (x) << ' '
+#define LOG(x) cout << SHOW(x) << endl;
 #define X(point) ((point).real())
 #define Y(point) ((point).imag())
 
