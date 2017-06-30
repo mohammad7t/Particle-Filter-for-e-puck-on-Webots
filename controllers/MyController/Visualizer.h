@@ -5,18 +5,24 @@
 #ifndef MYCONTROLLER_VISUALIZER_H
 #define MYCONTROLLER_VISUALIZER_H
 
-#include "MainController.h"
 #include "ParticleFilter.h"
+
+class IController {
+public:
+    virtual int nextStep() {
+        return -1;
+    }
+};
 
 class Visualizer {
 public:
-    MainController *controller;
+    IController *controller;
     ParticleFilter *particleFilter;
     bool doDisplay;
     Map *map;
     int cellSize;
 
-    void runController(MainController *controller);
+    void runController(IController *controller);
 
     Visualizer(int argc, char **argv);
 

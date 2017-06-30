@@ -25,6 +25,7 @@ void _idle() {
 
 Visualizer::Visualizer(int argc, char **argv) {
     glutInit(&argc, argv);                 // Initialize GLUT
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutCreateWindow("OpenGL Setup Test"); // Create a window with the given title
     glutInitWindowSize(320, 320);   // Set the window's initial width & height
     glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
@@ -38,7 +39,6 @@ void Visualizer::display() {
 
     if (!doDisplay) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-        glFlush();  // Render now
         glutSwapBuffers();
         return;
     }
@@ -78,7 +78,6 @@ void Visualizer::display() {
         glEnd();
     }
 
-    glFlush();  // Render now
     glutSwapBuffers();
 }
 
@@ -95,42 +94,16 @@ void Visualizer::drawCell(int row, int col) {
 Visualizer::~Visualizer() {
 }
 
-void Visualizer::runController(MainController *controller) {
+void Visualizer::runController(IController *controller) {
     _singleton = this;
     this->controller = controller;
     glutMainLoop();
 }
 
-bool playgroundOnce = false;
-
 void Visualizer::idle() {
     if (this->controller) {
+        glutPostRedisplay();
         this->controller->nextStep();
-        glutPostRedisplay();
-    } else {
-        // playground:
-        if (playgroundOnce)
-            return;
-        else
-            playgroundOnce = true;
-
-        cout << "here~~~~~~~~~~~" << endl;
-        double sensorValues[] = {15.0361, 48.8763, 57.569, 221.986, 235.146, 482.005, 107.171, 16.7376};
-        Observation observation = particleFilter->sensorModel->sensorValuesToObservation(sensorValues);
-        cout << observation << endl;
-        particleFilter->updateWeights(observation);
-        particleFilter->reSampling();
-        _sleep(2000);
-        glutPostRedisplay();
-
-//    for (int i = 0; i < particleFilter->particleSet.size(); ++i) {
-//        Action action;
-//        action.distance =10;
-//        action.rotateRadian =0;
-//        particleFilter->particleSet[i].doAction(&action,map);
-////        cout<<"particle "<<i<<":"<<particleFilter->particleSet[i].position<<endl;
-//    }
-//    _sleep(2000);
     }
 }
 

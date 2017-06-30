@@ -120,8 +120,8 @@ void Map::assignCanBeAt() {
 }
 
 Cell Map::point2cell(double x, double y) {
-    int xx = (int) (x / unit);
-    int yy = (int) (y / unit);
+    int xx = (int) floor(x / unit);
+    int yy = (int) floor(y / unit);
     return Cell(height - 1 - yy, xx);
 }
 

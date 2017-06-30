@@ -4,8 +4,9 @@
 #include "common.h"
 #include "Odometry.h"
 #include "ParticleFilter.h"
+#include "Visualizer.h"
 
-class MainController : public DifferentialWheels {
+class MainController : public DifferentialWheels, IController {
 public:
     ParticleFilter *particleFilter;
     Odometry odometry;

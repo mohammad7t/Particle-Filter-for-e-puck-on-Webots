@@ -6,6 +6,7 @@ double randZeroToOne() {
 }
 
 double randMToN(double M, double N) {
+    N -= 1e-9;
     return M + (rand() / (RAND_MAX / (N - M)));
 }
 
