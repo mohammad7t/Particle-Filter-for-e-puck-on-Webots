@@ -1,7 +1,7 @@
 #include "Visualizer.h"
 
 Map map("env-s.txt", "map-s.txt");
-SensorModel sensorModel;
+SensorModel sensorModel("sensorMean-i.txt", "sensorVar.txt");
 ParticleFilter particleFilter(10, &map, &sensorModel);
 
 class Controller : public IController {

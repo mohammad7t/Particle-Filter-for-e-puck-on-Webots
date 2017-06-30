@@ -6,7 +6,7 @@
 #include "ParticleFilter.h"
 #include "Visualizer.h"
 
-class MainController : public DifferentialWheels, IController {
+class MainController : public DifferentialWheels, public IController {
 public:
     ParticleFilter *particleFilter;
     Odometry odometry;

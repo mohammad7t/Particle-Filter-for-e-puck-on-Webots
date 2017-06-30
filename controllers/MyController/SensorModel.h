@@ -25,11 +25,11 @@ public:
     vector<vector<double>> stdDeviationSensorVector;
     vector<vector<Gaussian>> distanceSensors;
 
-    SensorModel(void);
+    SensorModel(const char *meanFilePath, const char *varFilePath);
 
     ~SensorModel(void);
 
-    void readSensorModelFile();
+    void readSensorModelFile(const char *s, const char *meanFilePath);
     void computeDistanceSensors();
 
     double convertSingleSensorValue(int sensorId, double sensorValue); //returns cenitemeter value

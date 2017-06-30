@@ -1,14 +1,14 @@
 #include <cstdlib>
 #include "SensorModel.h"
 
-SensorModel::SensorModel(void) {
-    readSensorModelFile();
+SensorModel::SensorModel(const char *meanFilePath, const char *varFilePath) {
+    readSensorModelFile(varFilePath, meanFilePath);
     computeDistanceSensors();
 }
 
-void SensorModel::readSensorModelFile() {
+void SensorModel::readSensorModelFile(const char *s, const char *meanFilePath) {
     ifstream meanFile;
-    meanFile.open("sensorMean.txt");
+    meanFile.open(meanFilePath);
     cout << "reading mean file ..." << endl;
     if (meanFile.is_open()) {
         for (int i = 0; i < 8; i++) {
@@ -52,7 +52,7 @@ void SensorModel::readSensorModelFile() {
         cout << "can not open mean file" << endl;
     }
     ifstream varianceFile;
-    varianceFile.open("sensorVar.txt");
+    varianceFile.open(s);
     cout << "reading variance file ..." << endl;
     if (varianceFile.is_open()) {
         for (int i = 0; i < 8; i++) {
