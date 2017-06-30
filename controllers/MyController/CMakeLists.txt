@@ -15,6 +15,7 @@ add_definitions(-DWIN32 -mwindows)
 
 set(SOURCE_FILES
         common.h common.cpp
+        tinyexpr.c tinyexpr.h
         Action.h Action.cpp
         MainController.cpp MainController.h
         Odometry.cpp Odometry.h

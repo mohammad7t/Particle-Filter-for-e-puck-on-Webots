@@ -17,7 +17,7 @@ void Odometry::update() {
 
 Action Odometry::getAction() {
     Action action;
-    action.distance = d - lastD;
+    action.distance = max(0.0, 100 * (d - lastD) - 2);
     action.rotateRadian = a - lastA;
     lastD = d;
     lastA = a;

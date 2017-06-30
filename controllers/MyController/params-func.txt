@@ -1,0 +1,3 @@
+exp(-pow(x - mean, 2.0) / 2 / var) / sqrt(2 * 3.14159 * var) + 1
+prev * curr
+1

@@ -157,6 +157,7 @@ Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
     return gaussian;
 }
 
+/**
 double SensorModel::getObservationProbability(Particle *particle, Observation *observation, Map *world) {
     Observation expectedObservation = getExpectedObservation(particle, world);
     double prob = 1;
@@ -165,6 +166,55 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
     }
     return prob;
 }
+/**/
+#include "tinyexpr.h"
+
+double funcReduceFirst, funcMean, funcVar, funcX, funcPrev, funcCurr;
+te_variable funcMapVars[] = {{"mean", &funcMean},
+                             {"var",  &funcVar},
+                             {"x",    &funcX}},
+        funcReduceVars[] = {{"prev", &funcPrev},
+                            {"curr", &funcCurr}};
+te_expr *funcMapExpr, *funcReduceExpr;
+bool funcLoaded = false;
+
+void funcLoad() {
+    if (funcLoaded)
+        return;
+    else
+        funcLoaded = true;
+    ifstream funcFin("params-func.txt");
+    string line;
+    int err;
+    getline(funcFin, line);
+    funcMapExpr = te_compile(line.c_str(), funcMapVars, 3, &err);
+    if (err) {
+        cout << "error parsing map" << endl;
+    }
+    getline(funcFin, line);
+    funcFin >> funcReduceFirst;
+    funcReduceExpr = te_compile(line.c_str(), funcReduceVars, 2, &err);
+    if (err) {
+        cout << "error parsing reduce" << endl;
+    }
+}
+
+double SensorModel::getObservationProbability(Particle *particle, Observation *observation, Map *world) {
+    funcLoad();
+    funcPrev = funcReduceFirst;
+    Observation expectedObservation = getExpectedObservation(particle, world);
+    for (int i = 0; i < SENSORS; i++) {
+        const Gaussian &gaussian = getSensorGaussian(i, expectedObservation[i]);
+        funcMean = gaussian.mean;
+        funcVar = gaussian.sigma2;
+        funcX = observation->at(i);
+        funcCurr = te_eval(funcMapExpr);
+        funcPrev = te_eval(funcReduceExpr);
+    }
+    return funcPrev;
+}
+
+/**/
 
 Observation SensorModel::getExpectedObservation(const Particle *particle, Map *world) const {
     Observation expectedObservation;

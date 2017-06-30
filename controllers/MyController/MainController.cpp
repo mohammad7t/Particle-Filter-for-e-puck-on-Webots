@@ -34,15 +34,16 @@ void MainController::readSensorValues() {
 }
 
 int MainController::nextStep() {
-    cout << "************************************** " << stepNumber << endl;
     stepNumber++;
     readSensorValues();
+    /*
     for (int i = 0; i < SENSORS; i++) {
         cout << sensorValue[i] << ',';
     }
     cout << endl;
+     */
 
-    if (stepNumber % 100 == 0) {
+    if (stepNumber % 50 == 0) {
 
         Action action = odometry.getAction();
         cout << "line 1" << SHOW(action) << endl;
