@@ -5,6 +5,8 @@
 #ifndef MYCONTROLLER_GUASSIAN_H
 #define MYCONTROLLER_GUASSIAN_H
 
+#include "common.h"
+
 class Gaussian {
 public:
     double mean;
@@ -17,5 +19,6 @@ public:
     double getProbability(double d);
 };
 
+std::ostream &operator<<(std::ostream &out, const Gaussian &rhs);
 
 #endif //MYCONTROLLER_GUASSIAN_H

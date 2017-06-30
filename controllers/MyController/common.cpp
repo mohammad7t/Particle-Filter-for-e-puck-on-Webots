@@ -9,15 +9,3 @@ double randMToN(double M, double N) {
     N -= 1e-9;
     return M + (rand() / (RAND_MAX / (N - M)));
 }
-
-std::ostream &operator<<(std::ostream &out, const vector<double> &rhs) {
-    out << '{';
-    for (int i = 0; i < rhs.size(); i++) {
-        out << rhs[i];
-        if (i + 1 < rhs.size()) {
-            out << ',';
-        }
-    }
-    out << '}';
-    return out;
-}

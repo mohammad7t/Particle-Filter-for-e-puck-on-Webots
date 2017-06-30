@@ -26,6 +26,17 @@ double randZeroToOne();
 
 double randMToN(double M, double N);
 
-std::ostream &operator<<(std::ostream &out, const vector<double> &rhs);
+template<typename T>
+std::ostream &operator<<(std::ostream &out, const vector<T, std::allocator<T>> &rhs) {
+    out << '{';
+    for (int i = 0; i < rhs.size(); i++) {
+        out << rhs[i];
+        if (i + 1 < rhs.size()) {
+            out << ',';
+        }
+    }
+    out << '}';
+    return out;
+}
 
 #endif // COMMON_H_INCLUDED

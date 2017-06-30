@@ -23,14 +23,12 @@ class SensorModel {
 public:
     vector<vector<double>> meanSensorVector;
     vector<vector<double>> stdDeviationSensorVector;
-    vector<vector<Gaussian>> distanceSensors;
 
     SensorModel(const char *meanFilePath, const char *varFilePath);
 
     ~SensorModel(void);
 
     void readSensorModelFile(const char *s, const char *meanFilePath);
-    void computeDistanceSensors();
 
     double convertSingleSensorValue(int sensorId, double sensorValue); //returns cenitemeter value
     Gaussian getSensorGaussian(int sensorId, double distance);

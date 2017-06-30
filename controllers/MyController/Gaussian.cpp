@@ -21,3 +21,8 @@ double Gaussian::getProbability(double x) {
 Gaussian::Gaussian(double mean, double sigma2) : mean(mean), sigma2(sigma2) {}
 
 Gaussian::Gaussian() : mean(0.0), sigma2(0.0) {}
+
+std::ostream &operator<<(std::ostream &out, const Gaussian &rhs) {
+    out << 'N(' << rhs.mean << "," << rhs.sigma2 << ')';
+    return out;
+}

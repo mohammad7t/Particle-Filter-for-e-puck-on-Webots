@@ -3,7 +3,6 @@
 
 SensorModel::SensorModel(const char *meanFilePath, const char *varFilePath) {
     readSensorModelFile(varFilePath, meanFilePath);
-    computeDistanceSensors();
 }
 
 void SensorModel::readSensorModelFile(const char *s, const char *meanFilePath) {
@@ -108,22 +107,23 @@ Observation SensorModel::sensorValuesToObservation(double *sensorValues) {
 }
 
 double interpolate(double x1, double y1, double x2, double y2, double xQuery) {
-    double dx = fabs(x1 - x2);
-    return fabs(x1 - xQuery) / dx * y2 + fabs(x2 - xQuery) / dx * y1;
+    // cout << x1 << ' ' << y1 << ';' << x2 << ' ' << y2 << ';' << xQuery << endl;
+    double dx = x2 - x1;
+    return (xQuery - x1) / dx * y2 + (x2 - xQuery) / dx * y1;
 }
 
 double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
-    vector<Gaussian> &gaussians = distanceSensors[sensorId];
+    vector<double> &means = meanSensorVector[sensorId];
     int slopeBegin = 0;
 
-    for (; slopeBegin < DISTANCES - 1; slopeBegin++) {
-//        cout<<"in for loop " <<endl;
-        if (gaussians[slopeBegin + 1].mean <= sensorValue) {
+    for (; slopeBegin < DISTANCES - 2; slopeBegin++) {
+        if (means[slopeBegin + 1] <= sensorValue) {
             break;
         }
     }
-    return interpolate(gaussians[slopeBegin].mean, slopeBegin,
-                       gaussians[slopeBegin + 1].mean, slopeBegin + 1,
+
+    return interpolate(means[slopeBegin], slopeBegin + 1,
+                       means[slopeBegin + 1], slopeBegin + 2,
                        sensorValue);
 }
 
@@ -181,14 +181,4 @@ double SensorModel::getObservationProbability(Particle *particle, Observation *o
                   getSensorGaussian(7, distanceSensor8).getProbability(observation[0][7]);
 
     return prob;
-}
-
-void SensorModel::computeDistanceSensors() {
-    distanceSensors = vector<vector<Gaussian>>(8, vector<Gaussian>(7, Gaussian(0, 0)));
-    for (int i = 0; i < SENSORS; i++) {
-        for (int j = 0; j < 7; j++) {
-            distanceSensors[i][j].mean = meanSensorVector[i][j];
-            distanceSensors[i][j].sigma2 = stdDeviationSensorVector[i][j];
-        }
-    }
 }
