@@ -54,7 +54,7 @@ int MainController::nextStep() {
     if (stepNumber % 20 == 0 && (rotdir == 0 | rotdir == 3)) {
         return particleFilterStep();
     }
-    if (sensorValue[0] > 2000 | sensorValue[1] > 1600 | sensorValue[7] > 2000 | sensorValue[6] > 1600) {
+    if (sensorValue[0] > 2000 | sensorValue[1] > 1500 | sensorValue[7] > 2000 | sensorValue[6] > 1500) {
 
         if (sensorValue[2] - 200 > sensorValue[5]) {
             rotdir = 1;
@@ -65,7 +65,7 @@ int MainController::nextStep() {
         }
     }
 
-    if (sensorValue[7] < 2000 && sensorValue[0] < 2000 && sensorValue[1] < 1600 && sensorValue[6] < 1600) {
+    if (sensorValue[7] < 2000 && sensorValue[0] < 2000 && sensorValue[1] < 1500 && sensorValue[6] < 1500) {
         rotdir = 0;
 
         if (sensorValue[7] > 1000 | sensorValue[0] > 1000) {
@@ -112,6 +112,24 @@ int MainController::particleFilterStep() {
 //    cout << "line 3" << endl;
     particleFilter->updateWeights(observation);
 //    cout << "line 4" << endl;
+    double maxWeight = 0;
+    for (int i=0; i<particleFilter->particleSet.size(); i++){
+        maxWeight = max(maxWeight, particleFilter->particleSet[i].weight);
+    }
+    LOG(maxWeight)
+    if (maxWeight < 1e-10){
+        cout << "Kidnapped!==============================================" << endl;
+        int particleSize = particleFilter->particleSet.size();
+        particleFilter->particleSet.clear();
+        for (int i=0; i<particleSize; i++){
+            particleFilter->particleSet.push_back(particleFilter->map->generateRandomParticle());
+        }
+        lastClock = -1;
+        odometry.lastA = odometry.a;
+        odometry.lastD = odometry.d;
+        stepNumber = 0;
+        return ret;
+    }
     particleFilter->reSampling();
 //    cout << "line 5" << endl;
     int clk = clock();
