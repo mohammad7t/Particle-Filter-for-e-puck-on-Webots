@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     Particle good;
     good.position = Point(6, 6);
     good.angle = M_PI_2;
-    particleFilter.particleSet.push_back(good);
+    //particleFilter.particleSet.push_back(good);
     MainController mainController(&particleFilter, motionModelSpeed);
     //mainController.run();
     Visualizer visualizer(argc, argv);
