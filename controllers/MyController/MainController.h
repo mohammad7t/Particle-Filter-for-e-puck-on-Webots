@@ -20,7 +20,7 @@ public:
     int speed[2];
     int stepNumber;
 
-    MainController(ParticleFilter *particleFilter);
+    MainController(ParticleFilter *particleFilter, double motionModelSpeed);
 
     virtual ~MainController();
 

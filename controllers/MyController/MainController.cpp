@@ -1,6 +1,6 @@
 #include "MainController.h"
 
-MainController::MainController(ParticleFilter *particleFilter) : DifferentialWheels() {
+MainController::MainController(ParticleFilter *particleFilter, double motionModelSpeed) : DifferentialWheels() {
     this->particleFilter = particleFilter;
     for (int i = 0; i < SENSORS; i++) {
         string deviceName = "ps" + string(1, char('0' + i));
@@ -16,7 +16,7 @@ MainController::MainController(ParticleFilter *particleFilter) : DifferentialWhe
     speed[0] = 100;
     speed[1] = 100;
 
-    odometry = Odometry(this);
+    odometry = Odometry(this, motionModelSpeed);
 
     stepNumber = 0;
 }

@@ -16,11 +16,11 @@ public:
 
     void update();
 
-    Odometry(DifferentialWheels *robot);
+    Odometry(DifferentialWheels *robot, double motionModelSpeed);
 
     Odometry();
 
-
+    double motionModelSpeed;
 };
 
 #endif // ODOMETRY_H
