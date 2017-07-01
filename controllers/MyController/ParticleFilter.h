@@ -24,7 +24,7 @@ public:
 
     void updateWeights(Observation &observation);
 
-    void updateParticleSetWithAction(Action *action);
+    void updateParticleSetWithAction(Action *action, double dVar, double aVar);
 
     void reSampling();
 

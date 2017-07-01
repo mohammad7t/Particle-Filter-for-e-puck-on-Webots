@@ -1,6 +1,7 @@
 #include "MainController.h"
 
-MainController::MainController(ParticleFilter *particleFilter, double motionModelSpeed) : DifferentialWheels() {
+MainController::MainController(ParticleFilter *particleFilter, double motionModelSpeed, double dvar, double avar)
+        : DifferentialWheels() {
     this->particleFilter = particleFilter;
     for (int i = 0; i < SENSORS; i++) {
         string deviceName = "ps" + string(1, char('0' + i));
@@ -17,7 +18,8 @@ MainController::MainController(ParticleFilter *particleFilter, double motionMode
     speed[1] = 100;
 
     odometry = Odometry(this, motionModelSpeed);
-
+    dVar = dvar;
+    aVar = avar;
     stepNumber = 0;
 }
 
@@ -97,7 +99,7 @@ int MainController::particleFilterStep() {
     readSensorValues();
     Action action = odometry.getAction();
     cout << "line 1" << SHOW(action) << endl;
-    particleFilter->updateParticleSetWithAction(&action);
+    particleFilter->updateParticleSetWithAction(&action, this->dVar, this->aVar);
     cout << "line 2" << endl;
     Observation observation = getObservation();
     cout << "line 3" << endl;

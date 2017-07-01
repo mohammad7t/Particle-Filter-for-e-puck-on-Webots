@@ -27,10 +27,19 @@ void ParticleFilter::updateWeights(Observation &observation) {
     }
 }
 
-void ParticleFilter::updateParticleSetWithAction(Action *action) {
+void ParticleFilter::updateParticleSetWithAction(Action *action, double dVar, double aVar) {
     tickVersion();
+    Gaussian gaussian;
     for (int i = 0; i < particleSet.size(); ++i) {
-        particleSet[i].doAction(action, map);
+        Action newAction = *action;
+        //LOG(newAction)
+        //if (action->rotateRadian < 3 * M_PI / 180) {
+        newAction.distance = newAction.distance * gaussian.getSample(1, 0.01) +
+                             abs(gaussian.getSample(0, pow(dVar * log(action->distance), 2)));
+        //} else {
+        newAction.rotateRadian = newAction.rotateRadian + gaussian.getSample(0, pow(aVar, 2));
+        //}
+        particleSet[i].doAction(&newAction, map);
     }
 }
 
