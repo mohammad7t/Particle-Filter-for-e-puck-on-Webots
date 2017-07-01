@@ -1,2 +1,2 @@
-10 101 env.txt map.txt sensorMean.txt sensorVar.txt
+1000 101 env.txt map.txt sensorMean.txt sensorVar.txt
 10 90 env.txt map.txt sensorMean-i.txt sensorVar-i.txt
