@@ -38,11 +38,12 @@ int oldrotdir=0;
 int MainController::nextStep() {
     stepNumber++;
     readSensorValues();
-
+    /**
     for (int i = 0; i < SENSORS; i++) {
         cout << sensorValue[i] << ',';
     }
     cout << ',' << rotdir << odometry.a << ',' << odometry.d << endl;
+    /**/
     if (stepNumber % 20 == 0 && (rotdir == 0 | rotdir == 3)) {
         return particleFilterStep();
     }

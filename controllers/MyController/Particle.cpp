@@ -11,14 +11,10 @@ void Particle::doAction(Action *action, Map *world) {
     double nextX, nextY;
     nextX = position.real();
     nextY = position.imag();
-    LOG(*action)
-    LOG(action->distance)
-    cout << SHOW(position);
     int iteration = (int) (action->distance / step);
 //    cout<<"itearation ="<<iteration<<endl;
 //    cout << "doAction: nextX=" << nextX << "\tnextY=" << nextY << endl;
 //    cout << "can at here: "<<world->canRobotBeAt(nextX,nextY)<<endl;
-    LOG(iteration)
     for (int j = 0; j < iteration; ++j) {
 
         nextX = nextX + cos(angle) * step;
@@ -34,7 +30,6 @@ void Particle::doAction(Action *action, Map *world) {
         }
     }
     position = Point(nextX, nextY);
-    cout << SHOW(position);
     angle = angle + action->rotateRadian;
 }
 

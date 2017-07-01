@@ -4,6 +4,8 @@ Odometry::Odometry() {}
 
 Odometry::Odometry(DifferentialWheels *robot) {
     this->robot = robot;
+    lastD = 0;
+    lastA = 0;
 }
 
 void Odometry::update() {
@@ -17,11 +19,14 @@ void Odometry::update() {
 
 Action Odometry::getAction() {
     Action action;
-    action.distance = max(0.0, 100 * (d - lastD) - 2);
+    action.distance = max(0.0, 100 * (d - lastD));
     action.rotateRadian = a - lastA;
+    LOG(a);
+    LOG(d);
+    LOG(lastA)
+    LOG(lastD)
     lastD = d;
     lastA = a;
-
     return action;
 }
 
