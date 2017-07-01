@@ -12,8 +12,8 @@ int main(int argc, char **argv) {
     SensorModel sensorModel(sensorMeanFile.c_str(), sensorVarFile.c_str());
     ParticleFilter particleFilter(particleCount, &map, &sensorModel);
     Particle good;
-    good.position = Point(6, 6);
-    good.angle = M_PI_2;
+    good.position = Point(65, 7);
+    good.angle = M_PI;
     //particleFilter.particleSet.push_back(good);
     MainController mainController(&particleFilter, motionModelSpeed, dVar, aVar, thr, thrD);
     //mainController.run();

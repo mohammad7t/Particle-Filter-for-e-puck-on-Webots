@@ -35,7 +35,7 @@ void ParticleFilter::updateParticleSetWithAction(Action *action, double dVar, do
         //LOG(newAction)
         //if (action->rotateRadian < 3 * M_PI / 180) {
         if (action->distance > 1e-8) {
-            newAction.distance = newAction.distance * gaussian.getSample(1, 0.01) +
+            newAction.distance = newAction.distance /* * gaussian.getSample(1, 0.01) */ +
                                  abs(gaussian.getSample(0, pow(dVar * log(action->distance), 2)));
         }
         //} else {
