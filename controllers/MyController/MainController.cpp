@@ -33,7 +33,8 @@ void MainController::readSensorValues() {
     odometry.update();
 }
 
-int rotdir;
+int rotdir=0;
+int oldrotdir=0;
 int MainController::nextStep() {
     stepNumber++;
     readSensorValues();
@@ -66,29 +67,25 @@ int MainController::nextStep() {
     if (rotdir == 0) {
         speed[0] = 100;
         speed[1] = 100;
-        setSpeed(speed[0], speed[1]);
-        return step(TIME_STEP);
-    }
-    if (rotdir == 3) {
+    } else if (rotdir == 3) {
         speed[0] = 50;
         speed[1] = 50;
-        setSpeed(speed[0], speed[1]);
-        return step(TIME_STEP);
-    }
-    if (rotdir == 1) {
+    } else if (rotdir == 1) {
         speed[0] = -20;
         speed[1] = 20;
-        setSpeed(speed[0], speed[1]);
-        return step(TIME_STEP);
-
-    }
-    if (rotdir == 2) {
+    } else if (rotdir == 2) {
         speed[0] = 20;
         speed[1] = -20;
-        setSpeed(speed[0], speed[1]);
-        return step(TIME_STEP);
     }
-
+    if(rotdir==3 && oldrotdir==0){
+        oldrotdir = rotdir;
+        return particleFilterStep();
+    }
+    if((rotdir==0 || rotdir==3) && (oldrotdir==1 || oldrotdir==2)){
+        oldrotdir = rotdir;
+        return particleFilterStep();
+    }
+    if(stepNumber%3==1)oldrotdir = rotdir;
     setSpeed(speed[0], speed[1]);
     return step(TIME_STEP);
 }
@@ -96,6 +93,7 @@ int MainController::nextStep() {
 int MainController::particleFilterStep() {
     setSpeed(0, 0);
     int ret = step(TIME_STEP);
+    readSensorValues();
     Action action = odometry.getAction();
     cout << "line 1" << SHOW(action) << endl;
     particleFilter->updateParticleSetWithAction(&action);

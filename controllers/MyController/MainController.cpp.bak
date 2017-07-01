@@ -1,0 +1,110 @@
+#include "MainController.h"
+
+int rotdir;
+double sidesoensore[2][10];
+MainController::MainController(ParticleFilter *particleFilter) : DifferentialWheels() {
+    this->particleFilter = particleFilter;
+    for (int i = 0; i < SENSORS; i++) {
+        string deviceName = "ps" + string(1, char('0' + i));
+        sensor[i] = getDistanceSensor(deviceName);
+        sensor[i]->enable(TIME_STEP);
+    }
+
+    accelerometer = getAccelerometer("accelerometer");
+    accelerometer->enable(TIME_STEP);
+
+    enableEncoders(TIME_STEP);
+
+    speed[0] = 100;
+    speed[1] = 100;
+
+    odometry = Odometry(this);
+
+    stepNumber = 0;
+}
+
+MainController::~MainController() {
+}
+
+void MainController::readSensorValues() {
+    for (int i = 0; i < SENSORS; i++) {
+        sensorValue[i] = sensor[i]->getValue();
+    }
+    accValue = accelerometer->getValues();
+    odometry.update();
+}
+
+int MainController::nextStep() {
+    cout << "************************************** " << stepNumber << endl;
+    stepNumber++;
+    readSensorValues();
+         for (int i = 0; i < SENSORS; i++) {
+        cout << sensorValue[i]<< ',';
+    }
+        cout << ','<<rotdir<<odometry.a<<','<<odometry.d<<endl;
+    if (stepNumber % 20 ==0 && (rotdir==0 | rotdir==3)){
+        setSpeed(0, 0);
+        int ret = step(TIME_STEP);
+        _sleep(2000);
+        return ret;
+    }
+          if(sensorValue[0]>2000 | sensorValue[1]>1600 | sensorValue[7]>2000 | sensorValue[6]>1600) {
+
+          if (sensorValue[2] - 200 > sensorValue[5]) {
+              rotdir = 1;
+              sidesoensore[0][0]=sensorValue[2];
+          } else if (sensorValue[5] - 200 > sensorValue[2]) {
+              rotdir = 2;
+              sidesoensore[1][0]=sensorValue[5];
+          }else if(rotdir==0 | rotdir==3){
+              rotdir=rand()%2+1;
+          }
+      }
+
+    if (sensorValue[7] < 2000 && sensorValue[0]<2000&&sensorValue[1] < 1600 && sensorValue[6]<1600) {
+        rotdir=0;
+
+        if (sensorValue[7]>  1000 | sensorValue[0]>1000) {
+            rotdir=3;
+        }
+    }
+    if (rotdir == 0){
+        speed[0] = 100;
+        speed[1] = 100;
+        setSpeed(speed[0], speed[1]);
+        return step(TIME_STEP);
+    }
+    if (rotdir == 3){
+        speed[0] = 50;
+        speed[1] = 50;
+        setSpeed(speed[0], speed[1]);
+        return step(TIME_STEP);
+    }
+    if (rotdir == 1){
+        speed[0] = -20;
+        speed[1] = 20;
+        setSpeed(speed[0], speed[1]);
+        return step(TIME_STEP);
+
+    }
+    if (rotdir == 2){
+        speed[0] = 20;
+        speed[1] = -20;
+        setSpeed(speed[0], speed[1]);
+        return step(TIME_STEP);
+    }
+
+}
+
+
+void MainController::run() {
+    int t;
+    do {
+        t = nextStep();
+    } while (t != -1);
+}
+
+Observation MainController::getObservation() {
+
+    return particleFilter->sensorModel->sensorValuesToObservation(sensorValue);
+}
