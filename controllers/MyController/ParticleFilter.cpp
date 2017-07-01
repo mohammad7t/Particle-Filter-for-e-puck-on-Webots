@@ -34,8 +34,10 @@ void ParticleFilter::updateParticleSetWithAction(Action *action, double dVar, do
         Action newAction = *action;
         //LOG(newAction)
         //if (action->rotateRadian < 3 * M_PI / 180) {
-        newAction.distance = newAction.distance * gaussian.getSample(1, 0.01) +
-                             abs(gaussian.getSample(0, pow(dVar * log(action->distance), 2)));
+        if (action->distance > 1e-8) {
+            newAction.distance = newAction.distance * gaussian.getSample(1, 0.01) +
+                                 abs(gaussian.getSample(0, pow(dVar * log(action->distance), 2)));
+        }
         //} else {
         newAction.rotateRadian = newAction.rotateRadian + gaussian.getSample(0, pow(aVar, 2));
         //}
@@ -52,9 +54,9 @@ void ParticleFilter::reSampling() {
         sumWeight += particleSet[i].weight;
         weightsDivider.push_back(sumWeight);
     }
-    cout
-            << "sumWeight ====================================================================================================="
-            << sumWeight << endl;
+//    cout
+//            << "sumWeight ====================================================================================================="
+//            << sumWeight << endl;
     double accumulative = sumWeight;
     for (int i = 0; i < particleSet.size(); ++i) {
         accumulative += particleSet[i].weight;

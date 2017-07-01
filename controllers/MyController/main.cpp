@@ -5,8 +5,8 @@ int main(int argc, char **argv) {
     ifstream fin("params.txt");
     unsigned int particleCount;
     string envFile, mapFile, sensorMeanFile, sensorVarFile;
-    double motionModelSpeed, dVar, aVar;
-    fin >> particleCount >> motionModelSpeed >> dVar >> aVar;
+    double motionModelSpeed, dVar, aVar, thr, thrD;
+    fin >> particleCount >> motionModelSpeed >> dVar >> aVar >> thr >> thrD;
     fin >> envFile >> mapFile >> sensorMeanFile >> sensorVarFile;
     Map map(envFile.c_str(), mapFile.c_str());
     SensorModel sensorModel(sensorMeanFile.c_str(), sensorVarFile.c_str());
@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     good.position = Point(6, 6);
     good.angle = M_PI_2;
     //particleFilter.particleSet.push_back(good);
-    MainController mainController(&particleFilter, motionModelSpeed, dVar, aVar);
+    MainController mainController(&particleFilter, motionModelSpeed, dVar, aVar, thr, thrD);
     //mainController.run();
     Visualizer visualizer(argc, argv);
     visualizer.visualize(&particleFilter);

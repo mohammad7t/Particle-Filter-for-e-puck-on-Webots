@@ -22,10 +22,10 @@ Action Odometry::getAction() {
     Action action;
     action.distance = max(0.0, motionModelSpeed * (d - lastD));
     action.rotateRadian = a - lastA;
-    LOG(a);
-    LOG(d);
-    LOG(lastA)
-    LOG(lastD)
+//    LOG(a);
+//    LOG(d);
+//    LOG(lastA)
+//    LOG(lastD)
     lastD = d;
     lastA = a;
     return action;

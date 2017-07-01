@@ -1,6 +1,9 @@
+#include <ctime>
 #include "MainController.h"
 
-MainController::MainController(ParticleFilter *particleFilter, double motionModelSpeed, double dvar, double avar)
+MainController::MainController(ParticleFilter *particleFilter, double motionModelSpeed, double dvar, double avar,
+                               double threshold,
+                               double thrDistance)
         : DifferentialWheels() {
     this->particleFilter = particleFilter;
     for (int i = 0; i < SENSORS; i++) {
@@ -21,6 +24,8 @@ MainController::MainController(ParticleFilter *particleFilter, double motionMode
     dVar = dvar;
     aVar = avar;
     stepNumber = 0;
+    thr = threshold;
+    thrD = thrDistance;
 }
 
 MainController::~MainController() {
@@ -80,33 +85,67 @@ int MainController::nextStep() {
         speed[0] = 20;
         speed[1] = -20;
     }
-    if(rotdir==3 && oldrotdir==0){
+    if(rotdir == 3 && oldrotdir == 0){
         oldrotdir = rotdir;
         return particleFilterStep();
     }
-    if((rotdir==0 || rotdir==3) && (oldrotdir==1 || oldrotdir==2)){
+    if((rotdir == 0 || rotdir == 3) && (oldrotdir == 1 || oldrotdir == 2)){
         oldrotdir = rotdir;
         return particleFilterStep();
     }
-    if(stepNumber%3==1)oldrotdir = rotdir;
+    if(stepNumber % 3 == 1)oldrotdir = rotdir;
     setSpeed(speed[0], speed[1]);
     return step(TIME_STEP);
 }
 
+int lastClock = -1;
+int nearCount[100000 + 10];
 int MainController::particleFilterStep() {
     setSpeed(0, 0);
     int ret = step(TIME_STEP);
     readSensorValues();
     Action action = odometry.getAction();
-    cout << "line 1" << SHOW(action) << endl;
+//    cout << "line 1" << SHOW(action) << endl;
     particleFilter->updateParticleSetWithAction(&action, this->dVar, this->aVar);
-    cout << "line 2" << endl;
+//    cout << "line 2" << endl;
     Observation observation = getObservation();
-    cout << "line 3" << endl;
+//    cout << "line 3" << endl;
     particleFilter->updateWeights(observation);
-    cout << "line 4" << endl;
+//    cout << "line 4" << endl;
     particleFilter->reSampling();
-    cout << "line 5" << endl;
+//    cout << "line 5" << endl;
+    int clk = clock();
+    if (lastClock == -1) {
+        lastClock = clk + 30 * CLOCKS_PER_SEC;
+    } else if (clk - lastClock > 20 * CLOCKS_PER_SEC) {
+        cout << "checking..." << endl;
+        Point *best = NULL;
+        int bestCount = -1;
+        int particleCount = particleFilter->particleSet.size();
+        for (int i = 0; i < particleCount; i++) {
+            nearCount[i] = 0;
+            for (int j = 0; j < i; j++) {
+                double d = abs(particleFilter->particleSet[i].position - particleFilter->particleSet[j].position);
+                if (d < thrD) {
+                    nearCount[i]++;
+                    nearCount[j]++;
+                }
+            }
+        }
+        for (int i = 0; i < particleCount; i++) {
+            if (nearCount[i] > bestCount) {
+                bestCount = nearCount[i];
+                best = &(particleFilter->particleSet[i].position);
+            }
+        }
+        lastClock = clock();
+        double percent = 100.0 * bestCount / particleCount;
+        cout << SHOW(*best) << SHOW(bestCount) << SHOW(percent) << endl;
+        if (percent > thr) {
+            cout << "Done!" SHOW(*best) << endl;
+            exit(0);
+        }
+    }
     return ret;
 }
 
