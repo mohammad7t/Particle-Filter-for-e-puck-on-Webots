@@ -127,8 +127,8 @@ double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
         }
     }
 
-    double result = interpolate(means[slopeBegin], slopeBegin + 1,
-                                means[slopeBegin + 1], slopeBegin + 2,
+    double result = interpolate(means[slopeBegin], slopeBegin,
+                                means[slopeBegin + 1], slopeBegin + 1,
                                 sensorValue);
     return regularize(result);
 }
@@ -136,18 +136,12 @@ double SensorModel::convertSingleSensorValue(int sensorId, double sensorValue) {
 Gaussian SensorModel::getSensorGaussian(int sensorId, double distance) {
     Gaussian gaussian;
     gaussian.mean = distance;
-    if (distance <= 1) {
+    if (distance <= 0.5) {
         gaussian.sigma2 = stdDeviationSensorVector[sensorId][0];
     } else if (distance >= 7 - 1e9) {
-        gaussian.sigma2 = stdDeviationSensorVector[sensorId][6];
+        gaussian.sigma2 = stdDeviationSensorVector[sensorId][7];
     } else {
-        int lower = (int) floor(distance);
-        int upper = (int) ceil(distance);
-        if (lower == upper) {
-            upper += 1;
-        }
-        gaussian.sigma2 = (distance - lower) * stdDeviationSensorVector[sensorId][upper]
-                          + (upper - distance) * stdDeviationSensorVector[sensorId][lower];
+        gaussian.sigma2 = stdDeviationSensorVector[sensorId][(int) round(distance)];
     }
     if (gaussian.sigma2 < 0.0001) {
         cout << "===================================== " << distance << endl;
