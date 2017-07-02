@@ -67,11 +67,7 @@ void Map::readMapFile(const char *mapFileName) {
 
 bool Map::isObstacle(double x, double y) {
     Cell cell = point2cell(x, y);
-    for (int i = 0; i < obstacles.size(); i++) {
-        if (obstacles[i].first == cell.first && obstacles[i].second == cell.second)
-            return true;
-    }
-    return false;
+    return mapVector[cell.first][cell.second];
 }
 
 double Map::distanceToNearestObstacle(Point pos, double angle) {

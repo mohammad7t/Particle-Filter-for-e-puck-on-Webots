@@ -1,5 +1,6 @@
 #include "Particle.h"
 #include "Map.h"
+#include "Gaussian.h"
 
 Particle::~Particle(void) {
 
@@ -7,18 +8,16 @@ Particle::~Particle(void) {
 
 void Particle::doAction(Action *action, Map *world) {
 
+    angle = angle + action->rotateRadian;
     double step = 0.1;
     double nextX, nextY;
     nextX = position.real();
     nextY = position.imag();
-    LOG(*action)
-    LOG(action->distance)
-    cout << SHOW(position);
+
     int iteration = (int) (action->distance / step);
 //    cout<<"itearation ="<<iteration<<endl;
 //    cout << "doAction: nextX=" << nextX << "\tnextY=" << nextY << endl;
 //    cout << "can at here: "<<world->canRobotBeAt(nextX,nextY)<<endl;
-    LOG(iteration)
     for (int j = 0; j < iteration; ++j) {
 
         nextX = nextX + cos(angle) * step;
@@ -33,9 +32,8 @@ void Particle::doAction(Action *action, Map *world) {
             break;
         }
     }
+
     position = Point(nextX, nextY);
-    cout << SHOW(position);
-    angle = angle + action->rotateRadian;
 }
 
 Particle::Particle(void) {

@@ -10,7 +10,7 @@
 Visualizer *_singleton = NULL;
 
 void _display() {
-    cout << "display" << endl;
+//    cout << "display" << endl;
     if (_singleton) {
         _singleton->display();
     }

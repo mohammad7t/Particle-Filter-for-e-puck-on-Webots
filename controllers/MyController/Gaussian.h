@@ -17,6 +17,8 @@ public:
     Gaussian();
 
     double getProbability(double d);
+
+    double getSample(double mean, double variance);
 };
 
 std::ostream &operator<<(std::ostream &out, const Gaussian &rhs);

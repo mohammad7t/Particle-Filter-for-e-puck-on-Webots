@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include <iostream>
+#include <random>
 
 double Gaussian::getProbability(double x) {
 //    cout << "getProbability: x= " << x << endl;
@@ -22,6 +23,15 @@ double Gaussian::getProbability(double x) {
 Gaussian::Gaussian(double mean, double sigma2) : mean(mean), sigma2(sigma2) {}
 
 Gaussian::Gaussian() : mean(0.0), sigma2(0.0) {}
+
+std::default_random_engine generator;
+
+double Gaussian::getSample(double mean, double variance) {
+    std::normal_distribution<double> distribution(mean, variance);
+    double temp = distribution(generator);
+    //LOG(temp);
+    return temp;
+}
 
 std::ostream &operator<<(std::ostream &out, const Gaussian &rhs) {
     out << "N(" << rhs.mean << "," << rhs.sigma2 << ')';

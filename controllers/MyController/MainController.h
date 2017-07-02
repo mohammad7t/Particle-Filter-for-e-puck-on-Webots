@@ -20,7 +20,8 @@ public:
     int speed[2];
     int stepNumber;
 
-    MainController(ParticleFilter *particleFilter);
+    MainController(ParticleFilter *particleFilter, double motionModelSpeed, double dvar, double avar, double threshold,
+                   double thrDistance);
 
     virtual ~MainController();
 
@@ -33,6 +34,12 @@ public:
 //            { {150, -35}, {100, -15}, {80, -10}, {-10, -10},
 //              {-10, -10}, {-10, 80}, {-30, 100}, {-20, 150} };
 
+    int particleFilterStep();
+
+    double dVar;
+    double aVar;
+    double thr;
+    double thrD;
 };
 
 #endif // CPP_CONTROLLER_H
